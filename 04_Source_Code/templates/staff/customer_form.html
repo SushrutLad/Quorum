@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}New Customer{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Add Customer</h1><div class="crumbs"><a href="{{ url_for('staff.customers') }}">Customers</a> / New</div></div></div>
+<form class="card" method="post">
+  <div class="form-grid">
+    <div><label for="full_name">Full name</label><input id="full_name" name="full_name" value="{{ form.full_name }}" required></div>
+    <div><label for="email">Email (used to log in)</label><input id="email" name="email" type="email" value="{{ form.email }}" required></div>
+    <div><label for="phone">Phone</label><input id="phone" name="phone" value="{{ form.phone }}" pattern="[0-9]{10}" title="10 digit mobile number" required></div>
+    <div class="full"><label for="address">Address</label><input id="address" name="address" value="{{ form.address }}" required></div>
+    <div><label for="area">Area</label>
+      <select id="area" name="area" required>
+        {% for a in ['Gomti Nagar', 'Aliganj', 'Indira Nagar', 'Hazratganj', 'Alambagh'] %}
+          <option {{ 'selected' if form.area == a }}>{{ a }}</option>{% endfor %}
+      </select></div>
+    <div><label for="category">Category</label>
+      <select id="category" name="category">
+        <option value="residential">Residential</option>
+        <option value="commercial" {{ 'selected' if form.category == 'commercial' }}>Commercial</option>
+      </select></div>
+    <div><label for="password">Initial password</label><input id="password" name="password" type="password" minlength="6" required>
+      <div class="hint">Customer can change it later from Profile.</div></div>
+  </div>
+  <div class="actions"><a class="btn light" href="{{ url_for('staff.customers') }}">Cancel</a><button class="btn">Save Customer</button></div>
+</form>
+{% endblock %}

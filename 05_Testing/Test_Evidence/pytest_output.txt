@@ -1,0 +1,28 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/user/Quorum/04_Source_Code
+plugins: anyio-4.15.1
+collecting ... collected 20 items
+
+tests/test_app.py::test_it01_valid_login_goes_to_dashboard PASSED        [  5%]
+tests/test_app.py::test_it02_wrong_password_rejected PASSED              [ 10%]
+tests/test_app.py::test_it03_not_logged_in_redirects_to_login PASSED     [ 15%]
+tests/test_app.py::test_it04_role_checks PASSED                          [ 20%]
+tests/test_app.py::test_it05_customer_cannot_see_other_customers_bill PASSED [ 25%]
+tests/test_app.py::test_it06_reading_to_bill_to_payment PASSED           [ 30%]
+tests/test_app.py::test_it07_lower_reading_rejected PASSED               [ 35%]
+tests/test_app.py::test_it08_reading_date_must_move_forward PASSED       [ 40%]
+tests/test_app.py::test_it09_overpayment_rejected PASSED                 [ 45%]
+tests/test_app.py::test_it10_partial_payment PASSED                      [ 50%]
+tests/test_app.py::test_it11_outage_notifies_only_that_area PASSED       [ 55%]
+tests/test_app.py::test_it12_complaint_lifecycle PASSED                  [ 60%]
+tests/test_app.py::test_it13_duplicate_customer_email_rejected PASSED    [ 65%]
+tests/test_app.py::test_it14_tariff_change_does_not_alter_old_bills PASSED [ 70%]
+tests/test_billing.py::test_ut01_two_slabs PASSED                        [ 75%]
+tests/test_billing.py::test_ut02_zero_units_only_fixed_charge PASSED     [ 80%]
+tests/test_billing.py::test_ut03_exact_slab_boundary PASSED              [ 85%]
+tests/test_billing.py::test_ut04_open_ended_top_slab PASSED              [ 90%]
+tests/test_billing.py::test_ut05_negative_units_rejected PASSED          [ 95%]
+tests/test_billing.py::test_ut06_water_without_tax_and_decimal_units PASSED [100%]
+
+============================= 20 passed in 15.21s ==============================

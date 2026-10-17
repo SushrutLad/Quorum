@@ -1,0 +1,25 @@
+full_name,email,phone,area,category,address,utilities
+Rahul Verma,rahul@example.com,9876500001,Gomti Nagar,residential,"12, Vibhuti Khand, Gomti Nagar",E;W;G
+Priya Singh,priya@example.com,9876500002,Aliganj,residential,"45, Sector B, Aliganj",E;W;G
+Amit Kumar,amit@example.com,9876500003,Indira Nagar,residential,"7, Sector 14, Indira Nagar",E;G
+Neha Gupta,neha@example.com,9876500004,Hazratganj,residential,"21, Lalbagh Road, Hazratganj",E;W
+Sharma Sweets,sharmasweets@example.com,9876500005,Hazratganj,commercial,"3, Main Market, Hazratganj",E;W;G
+Rohit Sharma,rohit@example.com,9876500006,Gomti Nagar,residential,"88, Vishal Khand, Gomti Nagar",E;W
+Ananya Mishra,ananya@example.com,9876500007,Aliganj,residential,"16, Sector H, Aliganj",E;W;G
+Vikram Yadav,vikram@example.com,9876500008,Alambagh,residential,"5, Krishna Nagar, Alambagh",E;W
+Sneha Tiwari,sneha@example.com,9876500009,Indira Nagar,residential,"29, Sector 18, Indira Nagar",E;W;G
+City Care Clinic,citycare@example.com,9876500010,Indira Nagar,commercial,"2, Munshi Pulia, Indira Nagar",E;W
+Arjun Srivastava,arjun@example.com,9876500011,Gomti Nagar,residential,"40, Viram Khand, Gomti Nagar",E;G
+Kavya Pandey,kavya@example.com,9876500012,Alambagh,residential,"11, Charbagh Road, Alambagh",E;W;G
+Mohit Agarwal,mohit@example.com,9876500013,Aliganj,residential,"73, Sector Q, Aliganj",E;W
+Fresh Mart,freshmart@example.com,9876500014,Gomti Nagar,commercial,"1, Patrakarpuram, Gomti Nagar",E;W
+Ishaan Khan,ishaan@example.com,9876500015,Hazratganj,residential,"9, Ashok Marg, Hazratganj",E;G
+Pooja Saxena,pooja@example.com,9876500016,Alambagh,residential,"52, Avadh Vihar, Alambagh",E;W;G
+Sahil Dubey,sahil@example.com,9876500017,Indira Nagar,residential,"18, Sector 11, Indira Nagar",E;W
+Riya Chauhan,riya@example.com,9876500018,Gomti Nagar,residential,"64, Vinay Khand, Gomti Nagar",E;W;G
+Aditya Rastogi,aditya@example.com,9876500019,Aliganj,residential,"30, Sector E, Aliganj",E;G
+Hotel Lakeview,lakeview@example.com,9876500020,Hazratganj,commercial,"15, Shahnajaf Road, Hazratganj",E;W;G
+Meera Joshi,meera@example.com,9876500021,Alambagh,residential,"27, Singar Nagar, Alambagh",E;W
+Karan Malhotra,karan@example.com,9876500022,Indira Nagar,residential,"33, Sector 9, Indira Nagar",E;W;G
+Tanvi Bajpai,tanvi@example.com,9876500023,Gomti Nagar,residential,"77, Vipul Khand, Gomti Nagar",E;W
+Green Leaf Cafe,greenleaf@example.com,9876500024,Aliganj,commercial,"6, Kapoorthala, Aliganj",E;W;G

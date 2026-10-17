@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block title %}{{ customer.full_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>{{ customer.full_name }}</h1><div class="crumbs"><a href="{{ url_for('staff.customers') }}">Customers</a> / {{ customer.customer_code }}</div></div>
+  <a class="btn" href="{{ url_for('staff.connection_new') }}?customer_id={{ customer.customer_id }}">Add Connection</a>
+</div>
+<div class="grid g2">
+  <div class="card"><h2>Details</h2>
+    <dl class="kv">
+      <dt>Customer ID</dt><dd>{{ customer.customer_code }}</dd>
+      <dt>Phone</dt><dd>{{ customer.phone }}</dd>
+      <dt>Email</dt><dd>{{ customer.email }}</dd>
+      <dt>Address</dt><dd>{{ customer.address }}, {{ customer.area }}</dd>
+      <dt>Category</dt><dd>{{ customer.category|label }}</dd>
+    </dl>
+  </div>
+  <div class="card"><h2>Connections</h2>
+    <table><thead><tr><th>Connection</th><th>Utility</th><th>Meter</th><th>Status</th></tr></thead><tbody>
+    {% for c in connections %}<tr><td>{{ c.connection_no }}</td><td>{{ c.utility }}</td><td>{{ c.meter_no or '-' }}</td><td>{{ badge('active-conn', 'Active') if c.status == 'active' else badge(c.status) }}</td></tr>
+    {% else %}<tr><td colspan="4" class="muted">No connections yet.</td></tr>{% endfor %}
+    </tbody></table>
+  </div>
+</div>
+<div class="card" style="margin-top:16px"><h2>Recent Bills</h2>
+  <div class="table-wrap"><table><thead><tr><th>Bill</th><th>Month</th><th>Utility</th><th class="num">Amount</th><th class="num">Due</th><th>Status</th></tr></thead><tbody>
+  {% for b in bills %}<tr><td><a href="{{ url_for('staff.bill_detail', bill_id=b.bill_id) }}">{{ b.bill_no }}</a></td><td>{{ b.billing_month|month_name }}</td><td>{{ b.utility }}</td>
+    <td class="num">{{ b.total_amount|money }}</td><td class="num">{{ b.outstanding|money }}</td><td>{{ badge(b.status) }}</td></tr>
+  {% else %}<tr><td colspan="6" class="muted">No bills yet.</td></tr>{% endfor %}
+  </tbody></table></div>
+</div>
+{% endblock %}

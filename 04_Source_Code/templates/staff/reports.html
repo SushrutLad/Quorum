@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% from "_macros.html" import utility_icon %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Consumption Analytics</h1>
+  <div class="muted">{% if months %}{{ months[0]|month_name }} - {{ months[-1]|month_name }}{% endif %}</div></div>
+  <button class="btn light no-print" onclick="window.print()">Print report</button></div>
+
+<div class="grid g3">
+  {% for t in totals %}
+  <div class="card utility-card"><div class="head"><span class="icon {{ t.utility|lower }}">{{ utility_icon(t.utility) }}</span>
+    <div><div class="muted small">{{ t.utility }} usage</div><div class="amount">{{ '{:,.1f}'.format(t.units) }} {{ t.unit }}</div>
+    <div class="small muted">Billed {{ t.billed|money }}</div></div></div></div>
+  {% endfor %}
+</div>
+
+<div class="grid g3" style="margin-top:16px">
+  <div class="card span2"><h2>Area-wise Electricity Consumption (kWh)</h2><div class="chart-box"><canvas id="areaChart" aria-label="Electricity consumption by area"></canvas></div></div>
+  <div class="card"><h2>Billed Amount by Customer Type</h2><div class="chart-box"><canvas id="catChart" aria-label="Billed amount by customer category"></canvas></div></div>
+</div>
+
+<div class="grid g3" style="margin-top:16px">
+  <div class="card kpi"><h2>Collection Efficiency</h2>
+    {% set eff = (collection.paid / collection.billed * 100) if collection.billed else 0 %}
+    <div class="value">{{ '%.1f'|format(eff) }}%</div>
+    <div class="note">{{ collection.paid|money }} collected of {{ collection.billed|money }} billed</div></div>
+  <div class="card span2"><h2>Overdue Bills</h2><div class="table-wrap"><table>
+    <thead><tr><th>Bill</th><th>Customer</th><th>Utility</th><th>Due date</th><th class="num">Days overdue</th><th class="num">Outstanding</th></tr></thead>
+    <tbody>{% for b in overdue %}
+      <tr><td><a href="{{ url_for('staff.bill_detail', bill_id=b.bill_id) }}">{{ b.bill_no }}</a></td><td>{{ b.customer_name }}</td><td>{{ b.utility }}</td>
+          <td>{{ b.due_date|nice_date }}</td><td class="num">{{ b.days_overdue }}</td><td class="num">{{ b.outstanding|money }}</td></tr>
+    {% else %}<tr><td colspan="6" class="muted">No overdue bills.</td></tr>{% endfor %}</tbody>
+  </table></div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  const areas = {{ by_area|tojson }};
+  barChart("areaChart", areas.map(a => a.area), areas.map(a => a.units), UTILITY_COLORS.Electricity, "kWh");
+  const cats = {{ by_category|tojson }};
+  doughnut("catChart", cats.map(c => c.category[0].toUpperCase() + c.category.slice(1)), cats.map(c => c.billed), CATEGORY_COLORS);
+</script>
+{% endblock %}

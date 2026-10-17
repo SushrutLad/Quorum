@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Meter Readings{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Meter Readings</h1><div class="muted">Latest 100 readings</div></div>
+  <a class="btn" href="{{ url_for('staff.reading_new') }}">{{ icon('plus', 16) }} Add Reading</a>
+</div>
+<div class="card"><div class="table-wrap"><table>
+  <thead><tr><th>Date</th><th>Meter</th><th>Customer</th><th>Utility</th><th class="num">Previous</th><th class="num">Current</th><th class="num">Consumption</th><th>Recorded by</th></tr></thead>
+  <tbody>{% for r in readings %}
+    <tr><td class="nowrap">{{ r.reading_date|nice_date }}</td><td>{{ r.meter_no }}</td><td>{{ r.full_name }}</td><td>{{ r.utility }}</td>
+        <td class="num">{{ '%.1f'|format(r.previous_value) }}</td><td class="num">{{ '%.1f'|format(r.reading_value) }}</td>
+        <td class="num">{{ '%.1f'|format(r.consumption) }} {{ r.unit }}</td><td>{{ r.recorded_by_name or '-' }}</td></tr>
+  {% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

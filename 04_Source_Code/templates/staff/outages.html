@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Outages{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Outages</h1><div class="muted">Customers in the affected area are notified automatically</div></div>
+  <a class="btn" href="{{ url_for('staff.outage_new') }}">{{ icon('plus', 16) }} Report Outage</a></div>
+<div class="card">
+  <div class="tabs">
+    {% for s in ['active', 'scheduled', 'resolved'] %}
+      <a href="{{ url_for('staff.outages', status=s) }}" class="{{ 'active' if status == s }}">{{ s|label }} ({{ counts.get(s, 0) }})</a>{% endfor %}
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Area</th><th>Utility</th><th>Reason</th><th>Start Time</th><th>Estimated End</th><th>Status</th><th class="num">Affected Customers</th><th></th></tr></thead>
+    <tbody>{% for o in outages %}
+      <tr><td>{{ o.outage_no }}</td><td>{{ o.area }}</td><td>{{ o.utility }}</td><td>{{ o.reason }}</td>
+          <td class="nowrap">{{ o.start_time|nice_date }}</td><td class="nowrap">{{ o.estimated_end|nice_date }}</td>
+          <td>{{ badge(o.status) }}</td><td class="num">{{ o.affected }}</td>
+          <td>{% if o.status != 'resolved' %}
+            <form method="post" action="{{ url_for('staff.outage_resolve', outage_id=o.outage_id) }}"><button class="btn light small">Mark resolved</button></form>
+          {% else %}<span class="small muted">{{ o.resolved_at|nice_date }}</span>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="9" class="empty">No {{ status }} outages.</td></tr>{% endfor %}</tbody>
+  </table></div>
+</div>
+{% endblock %}

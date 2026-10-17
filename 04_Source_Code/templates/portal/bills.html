@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block title %}Bills & Payments{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Bills &amp; Payments</h1><div class="muted">All your bills, newest first</div></div></div>
+<div class="card"><div class="table-wrap"><table>
+  <thead><tr><th>Bill No</th><th>Month</th><th>Utility</th><th class="num">Units</th><th class="num">Amount</th><th class="num">Outstanding</th><th>Due Date</th><th>Status</th><th></th></tr></thead>
+  <tbody>{% for b in bills %}
+    <tr><td><a href="{{ url_for('customer.bill_detail', bill_id=b.bill_id) }}">{{ b.bill_no }}</a></td><td>{{ b.billing_month|month_name }}</td><td>{{ b.utility }}</td>
+        <td class="num">{{ '%.1f'|format(b.units) }} {{ b.unit }}</td><td class="num">{{ b.total_amount|money }}</td><td class="num">{{ b.outstanding|money }}</td>
+        <td class="nowrap">{{ b.due_date|nice_date }}</td><td>{{ badge(b.status) }}</td>
+        <td>{% if b.status != 'paid' %}<a class="btn small" href="{{ url_for('customer.pay', bill_id=b.bill_id) }}">Pay</a>{% endif %}</td></tr>
+  {% else %}<tr><td colspan="9" class="empty">No bills yet.</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

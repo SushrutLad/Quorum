@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Connections{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Connections</h1><div class="muted">{{ connections|length }} connections</div></div>
+  <a class="btn" href="{{ url_for('staff.connection_new') }}">{{ icon('plus', 16) }} New Connection</a>
+</div>
+<div class="card">
+  <div class="tabs">
+    {% for u in ['', 'Electricity', 'Water', 'Gas'] %}
+      <a href="{{ url_for('staff.connections', utility=u) }}" class="{{ 'active' if utility == u }}">{{ u or 'All' }}</a>{% endfor %}
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Connection</th><th>Customer</th><th>Utility</th><th>Tariff</th><th>Meter</th><th>Area</th><th>Installed</th><th>Status</th></tr></thead>
+    <tbody>{% for c in connections %}
+      <tr><td>{{ c.connection_no }}</td><td>{{ c.full_name }} <span class="muted small">{{ c.customer_code }}</span></td><td>{{ c.utility }}</td>
+          <td>{{ c.tariff }}</td><td>{{ c.meter_no or '-' }}</td><td>{{ c.area }}</td><td>{{ c.installed_on|nice_date }}</td>
+          <td>{{ badge('active-conn', 'Active') if c.status == 'active' else badge(c.status) }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}New Connection{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>New Connection</h1><div class="crumbs"><a href="{{ url_for('staff.connections') }}">Connections</a> / New</div></div></div>
+<form class="card" method="post">
+  <div class="form-grid">
+    <div><label for="customer_id">Customer</label>
+      <select id="customer_id" name="customer_id" required>
+        {% for c in customers %}<option value="{{ c.customer_id }}" {{ 'selected' if request.args.get('customer_id', 0)|int == c.customer_id }}>{{ c.full_name }} ({{ c.customer_code }}, {{ c.category }})</option>{% endfor %}
+      </select></div>
+    <div><label for="utility_id">Utility</label>
+      <select id="utility_id" name="utility_id">{% for u in utilities %}<option value="{{ u.utility_id }}">{{ u.name }} ({{ u.unit }})</option>{% endfor %}</select></div>
+    <div><label for="initial_reading">Meter starting reading</label><input id="initial_reading" name="initial_reading" type="number" step="0.1" min="0" value="0"></div>
+  </div>
+  <p class="hint">The tariff plan is chosen automatically from the customer's category. A new meter is created with this connection.</p>
+  <div class="actions"><a class="btn light" href="{{ url_for('staff.connections') }}">Cancel</a><button class="btn">Create Connection</button></div>
+</form>
+{% endblock %}

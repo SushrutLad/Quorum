@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block title %}{{ c.complaint_no }}{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Complaint {{ c.complaint_no }}</h1><div class="crumbs"><a href="{{ url_for('staff.complaints') }}">Complaints</a> / {{ c.complaint_no }}</div></div>
+  <div>{{ badge(c.status) }} {{ badge(c.priority) }}</div></div>
+<div class="grid g2">
+  <div class="card"><h2>Details</h2>
+    <dl class="kv">
+      <dt>Customer</dt><dd>{{ c.full_name }} ({{ c.phone }})</dd>
+      <dt>Address</dt><dd>{{ c.address }}</dd>
+      <dt>Connection</dt><dd>{{ c.connection_no or '-' }} {{ c.utility or '' }}</dd>
+      <dt>Issue</dt><dd>{{ c.issue }}</dd>
+      <dt>Description</dt><dd>{{ c.description or '-' }}</dd>
+      <dt>Raised on</dt><dd>{{ c.created_at|nice_date }}</dd>
+      <dt>Resolved on</dt><dd>{{ c.resolved_at|nice_date }}</dd>
+    </dl>
+  </div>
+  <form class="card" method="post"><h2>Update</h2>
+    <div class="form-grid" style="grid-template-columns:1fr 1fr">
+      <div><label for="status">Status</label><select id="status" name="status">
+        {% for s in ['open', 'in_progress', 'resolved'] %}<option value="{{ s }}" {{ 'selected' if c.status == s }}>{{ s|label }}</option>{% endfor %}</select></div>
+      <div><label for="priority">Priority</label><select id="priority" name="priority">
+        {% for p in ['low', 'medium', 'high'] %}<option value="{{ p }}" {{ 'selected' if c.priority == p }}>{{ p|label }}</option>{% endfor %}</select></div>
+      <div class="full"><label for="assigned_to">Assign to</label><select id="assigned_to" name="assigned_to">
+        <option value="">Not assigned</option>
+        {% for e in employees %}<option value="{{ e.employee_id }}" {{ 'selected' if c.assigned_to == e.employee_id }}>{{ e.full_name }} - {{ e.designation }}</option>{% endfor %}</select></div>
+      <div class="full"><label for="resolution">Resolution notes</label><textarea id="resolution" name="resolution" rows="3">{{ c.resolution or '' }}</textarea></div>
+    </div>
+    <div class="actions"><button class="btn">Save</button></div>
+  </form>
+</div>
+{% endblock %}

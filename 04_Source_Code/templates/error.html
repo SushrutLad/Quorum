@@ -1,0 +1,4 @@
+{% extends "base.html" if session.user_id else "error_plain.html" %}
+{% block content %}
+<div class="card empty"><h1>{{ code }}</h1><p>{{ message }}</p><a class="btn" href="{{ url_for('index') }}">Go to dashboard</a></div>
+{% endblock %}

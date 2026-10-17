@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Customers{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Customers</h1><div class="muted">{{ customers|length }} customer{{ 's' if customers|length != 1 }}{% if q %} matching "{{ q }}"{% endif %}</div></div>
+  <a class="btn" href="{{ url_for('staff.customer_new') }}">{{ icon('plus', 16) }} New Customer</a>
+</div>
+<div class="card">
+  <form class="inline-form" style="margin-bottom:14px">
+    <input name="q" value="{{ q }}" placeholder="Name, code, area or phone" style="width:300px">
+    <button class="btn light small">Search</button>
+    {% if q %}<a href="{{ url_for('staff.customers') }}" class="small">Clear</a>{% endif %}
+  </form>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Area</th><th>Category</th><th class="num">Connections</th><th>Since</th><th></th></tr></thead>
+    <tbody>
+    {% for c in customers %}
+      <tr><td>{{ c.customer_code }}</td><td>{{ c.full_name }}</td><td>{{ c.phone }}</td><td>{{ c.area }}</td>
+          <td>{{ c.category|label }}</td><td class="num">{{ c.n_connections }}</td><td>{{ c.created_at|nice_date }}</td>
+          <td><a class="btn light small" href="{{ url_for('staff.customer_detail', customer_id=c.customer_id) }}">View</a></td></tr>
+    {% else %}<tr><td colspan="8" class="empty">No customers found.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endblock %}

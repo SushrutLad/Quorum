@@ -1,0 +1,16 @@
+{
+  "project_title": "Energy & Utility Management System (EUMS)",
+  "group_number": "Group __",
+  "section": "Section __",
+  "course": "Software Engineering & Project Management (SEPM)",
+  "instructor": "Prof. ____________",
+  "institute": "____________ Institute of Technology",
+  "submission_date": "October 2026",
+  "demo_video_link": "PASTE-VIEW-ONLY-LINK-HERE",
+  "members": [
+    {"name": "Sushrut Lad", "reg_no": "__________", "role": "Team lead, backend (billing, readings), database triggers"},
+    {"name": "Member 2", "reg_no": "__________", "role": "Database design, ER model, seed data, reports module"},
+    {"name": "Member 3", "reg_no": "__________", "role": "Frontend pages, customer portal, UI design"},
+    {"name": "Member 4", "reg_no": "__________", "role": "Requirements/SRS, testing, documentation"}
+  ]
+}

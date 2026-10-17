@@ -1,0 +1,14 @@
+flowchart TD
+  S((Start)) --> L[Customer logs in]
+  L --> V[Open Bills & Payments]
+  V --> Q{Bill unpaid?}
+  Q -- No --> X[Show 'already paid'] --> End((End))
+  Q -- Yes --> A[Enter amount, choose method]
+  A --> M{Method chosen?}
+  M -- No --> A
+  M -- Yes --> P[Insert payment]
+  P --> O{Amount > outstanding?}
+  O -- Yes --> R[Trigger rejects payment<br/>show error] --> A
+  O -- No --> U[Trigger updates bill<br/>paid / partial]
+  U --> N[Notification + receipt no.]
+  N --> End

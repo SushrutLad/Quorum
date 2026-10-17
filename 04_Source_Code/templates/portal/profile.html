@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Profile</h1><div class="muted">Customer ID {{ c.customer_code }}</div></div></div>
+<div class="grid g2">
+  <form class="card" method="post"><h2>Contact Details</h2>
+    <input type="hidden" name="action" value="details">
+    <label>Name</label><input value="{{ c.full_name }}" readonly>
+    <label style="margin-top:12px">Email</label><input value="{{ c.email }}" readonly>
+    <label for="phone" style="margin-top:12px">Phone</label><input id="phone" name="phone" value="{{ c.phone }}" pattern="[0-9]{10}" required>
+    <label for="address" style="margin-top:12px">Address</label><input id="address" name="address" value="{{ c.address }}" required>
+    <label style="margin-top:12px">Area / Category</label><input value="{{ c.area }} / {{ c.category|label }}" readonly>
+    <div class="actions"><button class="btn">Save</button></div>
+  </form>
+  <form class="card" method="post"><h2>Change Password</h2>
+    <input type="hidden" name="action" value="password">
+    <label for="current">Current password</label><input id="current" name="current" type="password" required>
+    <label for="new" style="margin-top:12px">New password</label><input id="new" name="new" type="password" minlength="6" required>
+    <div class="actions"><button class="btn">Change Password</button></div>
+  </form>
+</div>
+{% endblock %}

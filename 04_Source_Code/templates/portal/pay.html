@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Pay Bill{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Pay Bill</h1><div class="crumbs"><a href="{{ url_for('customer.bills') }}">Bills &amp; Payments</a> / Pay Bill</div></div></div>
+<form method="post" class="grid g2">
+  <div class="card"><h2>Bill Details</h2>
+    <dl class="kv">
+      <dt>Bill ID</dt><dd>{{ bill.bill_no }}</dd>
+      <dt>Utility</dt><dd>{{ bill.utility }}</dd>
+      <dt>Billing Period</dt><dd>{{ bill.billing_month|month_name }}</dd>
+      <dt>Due Date</dt><dd>{{ bill.due_date|nice_date }}</dd>
+      <dt>Total Amount</dt><dd>{{ bill.total_amount|money }}</dd>
+      <dt>Already Paid</dt><dd>{{ bill.amount_paid|money }}</dd>
+      <dt>Status</dt><dd>{{ badge(bill.status) }}</dd>
+    </dl>
+    <label for="amount" style="margin-top:16px">Amount to pay (&#8377;)</label>
+    <input id="amount" name="amount" type="number" step="0.01" min="1" max="{{ '%.2f'|format(bill.outstanding) }}" value="{{ '%.2f'|format(bill.outstanding) }}">
+    <div class="hint">You can pay part of the bill. You cannot pay more than {{ bill.outstanding|money }}.</div>
+  </div>
+  <div class="card"><h2>Select Payment Method</h2>
+    {% for key, text in methods.items() %}
+      <label class="pay-option"><input type="radio" name="method" value="{{ key }}" {{ 'checked' if loop.first }}> {{ text }}</label>
+    {% endfor %}
+    <button class="btn block" style="margin-top:8px">{{ icon('lock', 16) }} Pay <span id="payAmount">{{ bill.outstanding|money }}</span></button>
+    <p class="hint">Demo build: the payment gateway is simulated and every payment succeeds.</p>
+  </div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.getElementById("amount").addEventListener("input", (e) => {
+    document.getElementById("payAmount").textContent = "₹" + Number(e.target.value || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  });
+</script>
+{% endblock %}

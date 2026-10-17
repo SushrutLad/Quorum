@@ -1,0 +1,34 @@
+<h2>Project-Management Status</h2>
+{% include "pm_plan.html" %}
+<h3>Current progress</h3>
+<table>
+  <tr><th>Phase / work package</th><th>Planned by mid-sem</th><th>Actual</th><th>Status</th></tr>
+  <tr><td>Feasibility study</td><td>100%</td><td>100%</td><td><span class="tag done">On track</span></td></tr>
+  <tr><td>Requirements (SRS)</td><td>100%</td><td>100%</td><td><span class="tag done">On track</span></td></tr>
+  <tr><td>System and database design</td><td>100%</td><td>100%</td><td><span class="tag done">On track</span></td></tr>
+  <tr><td>Implementation</td><td>50%</td><td>~60% (19 of 25 requirements, 1 partial)</td><td><span class="tag done">Ahead</span></td></tr>
+  <tr><td>Testing</td><td>20%</td><td>20 automated tests, all passing</td><td><span class="tag done">On track</span></td></tr>
+  <tr><td>MySQL version for DBMS course</td><td>Started</td><td>Not started</td><td><span class="tag wip">Delayed</span></td></tr>
+  <tr><td>Deployment and documentation</td><td>&ndash;</td><td>README and run instructions done</td><td><span class="tag todo">Later</span></td></tr>
+  <caption>Progress against plan</caption>
+</table>
+<h3>Delayed or pending tasks</h3>
+<ul>
+  <li><b>MySQL schema port</b> &ndash; delayed because the team first chose SQLite to simplify setup; moved to weeks 9&ndash;10.</li>
+  <li><b>Reports date-range filter and CSV export</b> &ndash; pending (Could priority).</li>
+  <li><b>Meter replacement, late fees, PDF invoice</b> &ndash; planned for weeks 9&ndash;11.</li>
+  <li><b>CSRF protection</b> &ndash; identified during design review; scheduled before final submission.</li>
+</ul>
+<h3>Risks and mitigation plan</h3>
+<table>
+  <tr><th style="width:5%">#</th><th>Risk</th><th style="width:9%">Prob.</th><th style="width:9%">Impact</th><th>Mitigation</th></tr>
+  <tr><td>R1</td><td>Team members unfamiliar with Flask / web development</td><td>High</td><td>High</td><td>Chose the simplest stack; one sample page used as a pattern for all others; pair programming.</td></tr>
+  <tr><td>R2</td><td>Wrong bills because of calculation bugs</td><td>Medium</td><td>High</td><td>Billing as a pure function with hand-checked unit tests; bills store their own breakdown.</td></tr>
+  <tr><td>R3</td><td>Invalid data entered (lower readings, overpayment)</td><td>High</td><td>High</td><td>Database triggers and constraints plus UI validation; covered by tests IT-07 to IT-09.</td></tr>
+  <tr><td>R4</td><td>Customer sees another customer's data</td><td>Low</td><td>High</td><td>Ownership checks on every customer page; test IT-05.</td></tr>
+  <tr><td>R5</td><td>Late discovery of requirement errors (Waterfall weakness)</td><td>Medium</td><td>Medium</td><td>Review at the end of every phase; early end-to-end feature; MoSCoW scope buffer.</td></tr>
+  <tr><td>R6</td><td>Schedule clash with exams and other courses</td><td>High</td><td>Medium</td><td>Must features finished first; weekly meeting; tasks re-assigned when someone is busy.</td></tr>
+  <tr><td>R7</td><td>Losing code or conflicting edits</td><td>Medium</td><td>High</td><td>Git/GitHub with one branch per feature; frequent commits.</td></tr>
+  <tr><td>R8</td><td>Member unavailable near deadline</td><td>Medium</td><td>Medium</td><td>Shared documentation and code walkthroughs, so anyone can explain any module.</td></tr>
+  <caption>Risk register</caption>
+</table>

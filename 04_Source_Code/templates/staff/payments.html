@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Payments{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Payments</h1><div class="muted">Online payments and counter (cash) payments</div></div></div>
+<div class="grid g3" style="margin-bottom:16px">
+  {% for t in totals[:3] %}
+  <div class="card kpi"><div class="label">{{ t.method|method_name }}</div><div class="value">{{ t.total|money }}</div><div class="note">{{ t.n }} payments</div></div>
+  {% endfor %}
+</div>
+<div class="card"><div class="table-wrap"><table>
+  <thead><tr><th>Receipt</th><th>Date</th><th>Bill</th><th>Customer</th><th>Utility</th><th>Method</th><th class="num">Amount</th></tr></thead>
+  <tbody>{% for p in payments %}
+    <tr><td>{{ p.receipt_no }}</td><td class="nowrap">{{ p.paid_at|nice_date }}</td>
+        <td><a href="{{ url_for('staff.bill_detail', bill_id=p.bill_id) }}">{{ p.bill_no }}</a></td>
+        <td>{{ p.customer_name }}</td><td>{{ p.utility }}</td><td>{{ p.method|method_name }}</td><td class="num">{{ p.amount|money }}</td></tr>
+  {% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

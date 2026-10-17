@@ -1,0 +1,15 @@
+EUMS - Energy & Utility Management System - Mid-Semester Demo Video
+
+View-only link (replace before submitting, and check it opens in a private/incognito window):
+PASTE-VIEW-ONLY-LINK-HERE
+
+Suggested 5-7 minute outline:
+0:00  Title and team introduction (each member says their name)
+0:30  Problem: paper meter registers, manual slab billing, counter-only payments
+1:15  Solution overview and Waterfall phases completed
+2:00  Architecture (browser -> Flask -> SQLite) and ER diagram, triggers
+3:00  Demo: employee adds meter reading (show lower reading being blocked) -> bill generated
+4:00  Demo: customer logs in, sees bill, pays by UPI -> status Paid, notification
+4:45  Demo: admin dashboard, report outage -> customers in that area notified
+5:30  Limitations (simulated payment, no SMS/e-mail, MySQL port pending) and remaining work
+6:15  Each member states their contribution

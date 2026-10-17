@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Report Outage{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Report Outage</h1><div class="crumbs"><a href="{{ url_for('staff.outages') }}">Outages</a> / New</div></div></div>
+<form class="card" method="post">
+  <div class="form-grid">
+    <div><label for="utility_id">Utility</label><select id="utility_id" name="utility_id">
+      {% for u in utilities %}<option value="{{ u.utility_id }}" {{ 'selected' if (form.utility_id or 0)|int == u.utility_id }}>{{ u.name }}</option>{% endfor %}</select></div>
+    <div><label for="area">Area</label><select id="area" name="area">
+      {% for a in areas %}<option {{ 'selected' if form.area == a }}>{{ a }}</option>{% endfor %}</select></div>
+    <div><label for="reason">Reason</label><input id="reason" name="reason" value="{{ form.reason }}" placeholder="e.g. Transformer fault" required></div>
+    <div><label for="start_time">Start time</label><input id="start_time" name="start_time" type="datetime-local" value="{{ form.start_time }}" required></div>
+    <div><label for="estimated_end">Estimated end</label><input id="estimated_end" name="estimated_end" type="datetime-local" value="{{ form.estimated_end }}" required></div>
+  </div>
+  <p class="hint">If the start time is in the future the outage is saved as <b>scheduled</b>; otherwise it is <b>active</b>.</p>
+  <div class="actions"><a class="btn light" href="{{ url_for('staff.outages') }}">Cancel</a><button class="btn">Report &amp; Notify</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "_macros.html" import utility_icon, badge %}
+{% block title %}Outages{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Outages</h1><div class="muted">Supply interruptions in {{ area }} for your utilities</div></div></div>
+{% for o in outages %}
+  <div class="card utility-card"><div class="head"><span class="icon {{ o.utility|lower }}">{{ utility_icon(o.utility) }}</span>
+    <div style="flex:1"><b>{{ o.utility }} &middot; {{ o.reason }}</b> &nbsp;{{ badge(o.status) }}
+      <div class="small muted" style="margin-top:4px">{{ o.outage_no }} &middot; From {{ o.start_time|nice_date }} &middot; Expected back {{ o.estimated_end|nice_date }}
+      {% if o.resolved_at %} &middot; Restored {{ o.resolved_at|nice_date }}{% endif %}</div></div></div></div>
+{% else %}<div class="card empty">No outages reported in your area. </div>{% endfor %}
+{% endblock %}

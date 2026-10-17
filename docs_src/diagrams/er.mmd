@@ -1,0 +1,126 @@
+erDiagram
+  USERS ||--o| CUSTOMERS : "has profile"
+  USERS ||--o| EMPLOYEES : "has profile"
+  USERS ||--o{ NOTIFICATIONS : receives
+  CUSTOMERS ||--o{ CONNECTIONS : owns
+  UTILITIES ||--o{ CONNECTIONS : "type of"
+  UTILITIES ||--o{ TARIFF_PLANS : "priced by"
+  TARIFF_PLANS ||--|{ TARIFF_SLABS : contains
+  TARIFF_PLANS ||--o{ CONNECTIONS : "applies to"
+  CONNECTIONS ||--o{ METERS : "fitted with"
+  METERS ||--o{ METER_READINGS : records
+  METER_READINGS ||--o| BILLS : generates
+  CONNECTIONS ||--o{ BILLS : "billed on"
+  BILLS ||--|{ BILL_ITEMS : "itemised as"
+  BILLS ||--o{ PAYMENTS : "settled by"
+  CUSTOMERS ||--o{ COMPLAINTS : raises
+  EMPLOYEES ||--o{ COMPLAINTS : "assigned"
+  UTILITIES ||--o{ OUTAGES : affects
+  USERS {
+    int user_id PK
+    text username UK
+    text password_hash
+    text role "admin|employee|customer"
+    text full_name
+  }
+  CUSTOMERS {
+    int customer_id PK
+    int user_id FK
+    text customer_code UK
+    text phone
+    text email UK
+    text address
+    text area
+    text category "residential|commercial"
+  }
+  EMPLOYEES {
+    int employee_id PK
+    int user_id FK
+    text emp_code UK
+    text designation
+  }
+  UTILITIES {
+    int utility_id PK
+    text name UK
+    text unit
+  }
+  TARIFF_PLANS {
+    int tariff_id PK
+    int utility_id FK
+    text category
+    real fixed_charge
+    real tax_percent
+  }
+  TARIFF_SLABS {
+    int slab_id PK
+    int tariff_id FK
+    real from_unit
+    real to_unit
+    real rate
+  }
+  CONNECTIONS {
+    int connection_id PK
+    text connection_no UK
+    int customer_id FK
+    int utility_id FK
+    int tariff_id FK
+    text status
+  }
+  METERS {
+    int meter_id PK
+    text meter_no UK
+    int connection_id FK
+    real initial_reading
+    text status
+  }
+  METER_READINGS {
+    int reading_id PK
+    int meter_id FK
+    text reading_date
+    real previous_value
+    real reading_value
+    real consumption
+  }
+  BILLS {
+    int bill_id PK
+    text bill_no UK
+    int connection_id FK
+    int reading_id FK
+    real units
+    real total_amount
+    real amount_paid
+    text status
+  }
+  BILL_ITEMS {
+    int item_id PK
+    int bill_id FK
+    text description
+    real amount
+  }
+  PAYMENTS {
+    int payment_id PK
+    text receipt_no UK
+    int bill_id FK
+    real amount
+    text method
+  }
+  COMPLAINTS {
+    int complaint_id PK
+    int customer_id FK
+    int assigned_to FK
+    text issue
+    text priority
+    text status
+  }
+  OUTAGES {
+    int outage_id PK
+    int utility_id FK
+    text area
+    text status
+  }
+  NOTIFICATIONS {
+    int notification_id PK
+    int user_id FK
+    text title
+    int is_read
+  }

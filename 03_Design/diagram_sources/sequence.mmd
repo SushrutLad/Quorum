@@ -1,0 +1,32 @@
+sequenceDiagram
+  actor E as Employee
+  participant B as Browser
+  participant F as Flask (routes_staff)
+  participant BL as billing.py
+  participant DB as SQLite
+  actor C as Customer
+  E->>B: Select meter, enter current reading
+  B->>F: GET /staff/api/meters/{id}
+  F->>DB: SELECT last reading
+  DB-->>F: previous value
+  F-->>B: JSON (previous reading)
+  B-->>E: Show consumption live
+  E->>B: Save Reading
+  B->>F: POST /staff/readings/new
+  F->>DB: INSERT meter_readings
+  alt reading lower than previous
+    DB-->>F: trg_reading_monotonic ABORT
+    F-->>B: Error message, nothing saved
+  else valid reading
+    F->>BL: generate_bill(reading_id)
+    BL->>DB: SELECT tariff + slabs
+    BL->>DB: INSERT bills, bill_items
+    DB->>DB: trg_bill_notify (notify customer)
+    F->>DB: COMMIT
+    F-->>B: Redirect to Bill Details
+  end
+  C->>B: Pay bill (UPI)
+  B->>F: POST /my/bills/{id}/pay
+  F->>DB: INSERT payments
+  DB->>DB: trg_no_overpay check, then trg_payment_status (bill -> paid, notify)
+  F-->>B: Payment successful, receipt no.

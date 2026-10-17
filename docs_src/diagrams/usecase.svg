@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 760" font-family="Segoe UI, Arial, sans-serif" font-size="13">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#2563eb"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="250" y="50" width="400" height="690" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<text x="450.0" y="40" text-anchor="middle" font-weight="700" font-size="15">EUMS - Energy &amp; Utility Management System</text>
+<line x1="112" y1="260" x2="300.0" y2="100" stroke="#94a3b8"/>
+<line x1="112" y1="260" x2="300.0" y2="144" stroke="#94a3b8"/>
+<line x1="112" y1="260" x2="300.0" y2="188" stroke="#94a3b8"/>
+<line x1="112" y1="260" x2="300.0" y2="232" stroke="#94a3b8"/>
+<line x1="112" y1="260" x2="300.0" y2="320" stroke="#94a3b8"/>
+<line x1="112" y1="260" x2="300.0" y2="364" stroke="#94a3b8"/>
+<line x1="112" y1="260" x2="300.0" y2="408" stroke="#94a3b8"/>
+<line x1="788" y1="230" x2="600.0" y2="100" stroke="#94a3b8"/>
+<line x1="788" y1="230" x2="600.0" y2="144" stroke="#94a3b8"/>
+<line x1="788" y1="230" x2="600.0" y2="408" stroke="#94a3b8"/>
+<line x1="788" y1="230" x2="600.0" y2="452" stroke="#94a3b8"/>
+<line x1="788" y1="230" x2="600.0" y2="496" stroke="#94a3b8"/>
+<line x1="788" y1="230" x2="600.0" y2="540" stroke="#94a3b8"/>
+<line x1="788" y1="590" x2="600.0" y2="100" stroke="#94a3b8"/>
+<line x1="788" y1="590" x2="600.0" y2="584" stroke="#94a3b8"/>
+<line x1="788" y1="590" x2="600.0" y2="628" stroke="#94a3b8"/>
+<line x1="788" y1="590" x2="600.0" y2="672" stroke="#94a3b8"/>
+<line x1="788" y1="590" x2="600.0" y2="716" stroke="#94a3b8"/>
+<path d="M300.0 232 C 240.0 232, 240.0 276, 300.0 276" fill="none" stroke="#2563eb" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+<text x="242.0" y="258.0" text-anchor="end" fill="#2563eb" font-size="11">&lt;&lt;include&gt;&gt;</text>
+<path d="M300.0 628 C 240.0 628, 240.0 584, 300.0 584" fill="none" stroke="#2563eb" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+<text x="242.0" y="610.0" text-anchor="end" fill="#2563eb" font-size="11">&lt;&lt;include&gt;&gt;</text>
+<ellipse cx="450.0" cy="100" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="104" text-anchor="middle"><tspan font-weight="600">UC-01</tspan> Log in / Log out</text>
+<ellipse cx="450.0" cy="144" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="148" text-anchor="middle"><tspan font-weight="600">UC-02</tspan> Register customer</text>
+<ellipse cx="450.0" cy="188" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="192" text-anchor="middle"><tspan font-weight="600">UC-03</tspan> Create connection &amp; meter</text>
+<ellipse cx="450.0" cy="232" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="236" text-anchor="middle"><tspan font-weight="600">UC-04</tspan> Record meter reading</text>
+<ellipse cx="450.0" cy="276" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="280" text-anchor="middle"><tspan font-weight="600">UC-05</tspan> Generate bill</text>
+<ellipse cx="450.0" cy="320" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="324" text-anchor="middle"><tspan font-weight="600">UC-08</tspan> Record counter payment</text>
+<ellipse cx="450.0" cy="364" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="368" text-anchor="middle"><tspan font-weight="600">UC-10</tspan> Resolve complaint</text>
+<ellipse cx="450.0" cy="408" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="412" text-anchor="middle"><tspan font-weight="600">UC-11</tspan> Report / resolve outage</text>
+<ellipse cx="450.0" cy="452" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="456" text-anchor="middle"><tspan font-weight="600">UC-12</tspan> Manage tariffs</text>
+<ellipse cx="450.0" cy="496" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="500" text-anchor="middle"><tspan font-weight="600">UC-13</tspan> Manage employees</text>
+<ellipse cx="450.0" cy="540" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="544" text-anchor="middle"><tspan font-weight="600">UC-14</tspan> View dashboard &amp; reports</text>
+<ellipse cx="450.0" cy="584" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="588" text-anchor="middle"><tspan font-weight="600">UC-06</tspan> View / print bill</text>
+<ellipse cx="450.0" cy="628" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="632" text-anchor="middle"><tspan font-weight="600">UC-07</tspan> Pay bill online</text>
+<ellipse cx="450.0" cy="672" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="676" text-anchor="middle"><tspan font-weight="600">UC-09</tspan> Raise complaint</text>
+<ellipse cx="450.0" cy="716" rx="150" ry="17" fill="#eff6ff" stroke="#2563eb"/>
+<text x="450.0" y="720" text-anchor="middle"><tspan font-weight="600">UC-15</tspan> View usage &amp; notifications</text>
+<g stroke="#0f172a" stroke-width="2" fill="none"><circle cx="90" cy="222" r="11"/><line x1="90" y1="233" x2="90" y2="265"/><line x1="72" y1="245" x2="108" y2="245"/><line x1="90" y1="265" x2="76" y2="288"/><line x1="90" y1="265" x2="104" y2="288"/></g>
+<text x="90" y="306" text-anchor="middle" font-weight="700">Employee</text>
+<g stroke="#0f172a" stroke-width="2" fill="none"><circle cx="810" cy="192" r="11"/><line x1="810" y1="203" x2="810" y2="235"/><line x1="792" y1="215" x2="828" y2="215"/><line x1="810" y1="235" x2="796" y2="258"/><line x1="810" y1="235" x2="824" y2="258"/></g>
+<text x="810" y="276" text-anchor="middle" font-weight="700">Admin</text>
+<g stroke="#0f172a" stroke-width="2" fill="none"><circle cx="810" cy="552" r="11"/><line x1="810" y1="563" x2="810" y2="595"/><line x1="792" y1="575" x2="828" y2="575"/><line x1="810" y1="595" x2="796" y2="618"/><line x1="810" y1="595" x2="824" y2="618"/></g>
+<text x="810" y="636" text-anchor="middle" font-weight="700">Customer</text>
+</svg>

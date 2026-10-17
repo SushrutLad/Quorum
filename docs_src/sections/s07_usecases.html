@@ -1,0 +1,75 @@
+<h2>Requirements Model: Use Cases and User Stories</h2>
+<h3>Use-case diagram</h3>
+<p>Three actors use the system. "Employee" covers the meter reader, billing officer and technician, who share one role
+in the system. UC-05 <i>Generate bill</i> is never started by a person; it is included in UC-04, so every saved reading
+produces a bill.</p>
+<figure class="tall">{{ svg('usecase') }}<figcaption>Use-case diagram of EUMS</figcaption></figure>
+
+<h3>Use-case descriptions</h3>
+{% set UCS = [
+ ('UC-04 Record meter reading (includes UC-05 Generate bill)', 'Employee', 'Employee is logged in; the connection and meter are active.',
+  ['Employee opens Meter Readings &rarr; Add Reading.', 'Employee selects a meter; system shows customer name, utility and previous reading with its date.',
+   'Employee types the current reading; system shows the consumption immediately.', 'Employee enters the reading date and optional remarks and clicks Save Reading.',
+   'System saves the reading, calculates the bill from the tariff slabs (UC-05), saves the bill and its items, and notifies the customer.',
+   'System opens the new bill.'],
+  ['3a. Current reading lower than previous: an error is shown and Save is disabled. If submitted anyway, the database trigger rejects it and nothing is saved.',
+   '4a. Date on or before the last reading date: the trigger rejects it and an error is shown.', '4b. Reading already exists for that date: error shown.'],
+  'Reading and bill stored; customer sees the bill and a "New bill generated" notification.'),
+ ('UC-07 Pay bill online', 'Customer', 'Customer is logged in and has a bill that is unpaid or partial.',
+  ['Customer opens Bills &amp; Payments and clicks Pay on a bill.', 'System shows bill details and the outstanding amount, pre-filled.',
+   'Customer optionally changes the amount (partial payment) and chooses card / UPI / net banking / wallet.', 'Customer clicks Pay.',
+   'System records the payment with a receipt number; trigger updates bill to paid or partial and notifies the customer.', 'System shows the bill with the payment and a success message.'],
+  ['1a. Bill belongs to another customer: HTTP 403.', '4a. Amount more than outstanding: trigger rejects; error shown; nothing saved.',
+   '4b. No method chosen: error shown.', '1b. Bill already paid: message "already paid".'],
+  'Payment saved; bill status updated; receipt number shown.'),
+ ('UC-09 / UC-10 Raise and resolve complaint', 'Customer, Employee', 'Users are logged in.',
+  ['Customer opens Complaints, chooses connection, types the issue, details and urgency, and submits.', 'System creates complaint CMPxxxx with status Open.',
+   'Employee opens Complaints, filters Open, and opens the complaint.', 'Employee assigns a technician, sets priority, adds notes and changes status to In Progress or Resolved.',
+   'System saves the change, records resolution time, and notifies the customer through a trigger.'],
+  ['1a. Issue left empty: error shown.'], 'Complaint tracked to resolution; customer informed of each status change.'),
+ ('UC-11 Report outage', 'Admin, Employee', 'User is logged in as staff.',
+  ['Staff opens Outages &rarr; Report Outage.', 'Staff selects utility and area and enters reason, start time and estimated end.',
+   'System saves the outage as Active (or Scheduled if it starts in the future).', 'Trigger notifies every customer in that area who has that utility.',
+   'Later, staff clicks Mark resolved.'],
+  ['2a. End time not after start time: error shown.'], 'Outage visible to staff and affected customers.'),
+ ('UC-01 Log in', 'All', 'User has an active account.',
+  ['User opens the site and enters username/email and password.', 'System checks the password hash.', 'System opens the dashboard for the user\'s role.'],
+  ['2a. Wrong credentials: "Invalid username or password".', 'Any page opened without login redirects to the login page.'], 'User session created.'),
+] %}
+{% for name, actor, pre, main, alt, post in (UCS[:2] if is_report else UCS) %}
+<table class="kv">
+  <tr><th colspan="2">{{ name }}</th></tr>
+  <tr><td>Actor(s)</td><td>{{ actor }}</td></tr>
+  <tr><td>Pre-condition</td><td>{{ pre }}</td></tr>
+  <tr><td>Main flow</td><td><ol>{% for s in main %}<li>{{ s }}</li>{% endfor %}</ol></td></tr>
+  <tr><td>Alternate / exception flows</td><td><ul>{% for s in alt %}<li>{{ s }}</li>{% endfor %}</ul></td></tr>
+  <tr><td>Post-condition</td><td>{{ post }}</td></tr>
+</table>
+{% endfor %}
+
+{% if is_report %}<p>Descriptions of UC-09/10, UC-11 and UC-01 are in <code>02_Requirements/Use_Cases_or_User_Stories.pdf</code>.</p>{% endif %}
+<h3>User stories with acceptance criteria</h3>
+<table>
+  <tr><th style="width:7%">ID</th><th style="width:38%">User story</th><th>Acceptance criteria</th><th style="width:8%">Status</th></tr>
+  <tr><td>US-01</td><td>As a <b>meter reader</b>, I want to see the previous reading when I pick a meter, so that I do not mistype the new one.</td>
+      <td>Given a meter is selected, previous value and date are shown; consumption updates while typing; lower values show an error and disable Save.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-02</td><td>As a <b>billing officer</b>, I want bills to be calculated automatically from slabs, so that there are no manual errors.</td>
+      <td>For 250 kWh on the domestic plan the bill is &#8377;1,207.50 with two slab rows, fixed charge and 5% tax.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-03</td><td>As a <b>customer</b>, I want to pay my bill online by UPI or card, so that I do not have to visit the office.</td>
+      <td>Pay page shows outstanding amount; payment creates receipt RCPyyyymmdd-nnnn; bill becomes Paid; overpayment rejected.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-04</td><td>As a <b>customer</b>, I want to see all my connections and current bills on one dashboard.</td>
+      <td>Dashboard shows one card per connection with latest bill amount, due date and status, plus a 6-month chart.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-05</td><td>As a <b>customer</b>, I want to be told about outages in my area.</td>
+      <td>When staff report an outage for area A and utility U, all customers in A with U get a notification; others do not.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-06</td><td>As a <b>technician</b>, I want to see open complaints and update them.</td>
+      <td>Complaints page has tabs All/Open/In progress/Resolved with counts; saving Resolved records the time and notifies the customer.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-07</td><td>As an <b>admin</b>, I want to change tariff rates without changing old bills.</td>
+      <td>Edited rates are used for the next bill; previously issued bill totals are unchanged.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-08</td><td>As an <b>admin</b>, I want to see revenue, dues and complaints at a glance.</td>
+      <td>Dashboard shows 6 KPI cards, billed amount by utility for 6 months, collections split and recent activity.</td><td><span class="tag done">Done</span></td></tr>
+  <tr><td>US-09</td><td>As an <b>admin</b>, I want overdue reminders and late fees to be applied automatically.</td>
+      <td>Bills unpaid after the due date get a surcharge and the customer is reminded.</td><td><span class="tag todo">Planned</span></td></tr>
+  <tr><td>US-10</td><td>As a <b>billing officer</b>, I want to replace a faulty meter without breaking reading history.</td>
+      <td>Old meter marked Replaced; new meter starts at its own baseline; next bill uses the new meter.</td><td><span class="tag todo">Planned</span></td></tr>
+  <caption>User stories</caption>
+</table>

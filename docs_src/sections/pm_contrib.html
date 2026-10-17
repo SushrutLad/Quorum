@@ -1,0 +1,38 @@
+{% if not is_report %}<h2>Contribution Record</h2>{% endif %}
+<h3>Individual contribution table</h3>
+<table>
+  <tr><th style="width:5%">#</th><th style="width:18%">Name</th><th style="width:15%">Reg. no.</th><th>Responsibilities and work done</th><th style="width:10%">Share</th></tr>
+  {% for m in team.members %}<tr><td>{{ loop.index }}</td><td>{{ m.name }}</td><td>{{ m.reg_no }}</td><td>{{ m.role }}</td><td>{{ (100 / team.members|length)|round|int }}%</td></tr>{% endfor %}
+  <caption>Individual contributions</caption>
+</table>
+<h3>Task-allocation table</h3>
+{% set M = team.members %}
+{% set n = M|length %}
+<table>
+  <tr><th>Task</th><th>Phase</th><th>Responsible</th><th>Support</th><th>Status</th></tr>
+  {% for task, phase, a, b, st in [
+    ('Feasibility study', 'Feasibility', 0, 3, 'done'), ('Requirements and SRS', 'Requirements', 3, 0, 'done'),
+    ('Use cases and user stories', 'Requirements', 3, 2, 'done'), ('Architecture and module design', 'Design', 0, 1, 'done'),
+    ('ER diagram, schema, normalisation', 'Design', 1, 0, 'done'), ('Triggers and views', 'Design', 0, 1, 'done'),
+    ('UI design and templates', 'Design / Impl.', 2, 3, 'done'), ('Auth, customers, connections', 'Implementation', 0, 2, 'done'),
+    ('Meter readings and billing', 'Implementation', 0, 1, 'done'), ('Payments and customer portal', 'Implementation', 2, 0, 'done'),
+    ('Complaints and outages', 'Implementation', 2, 1, 'done'), ('Dashboards and reports', 'Implementation', 1, 2, 'wip'),
+    ('Seed data and sample CSV', 'Implementation', 1, 3, 'done'), ('Unit and functional tests', 'Testing', 3, 0, 'done'),
+    ('Mid-sem report and diagrams', 'Documentation', 3, 1, 'done'), ('Demo video', 'Documentation', 2, 0, 'todo'),
+    ('MySQL port', 'Implementation', 1, 0, 'todo'),
+  ] %}
+  <tr><td>{{ task }}</td><td>{{ phase }}</td><td>{{ M[a % n].name }}</td><td>{{ M[b % n].name }}</td>
+      <td><span class="tag {{ st }}">{{ {'done':'Done','wip':'In progress','todo':'Pending'}[st] }}</span></td></tr>
+  {% endfor %}
+  <caption>Task allocation</caption>
+</table>
+<h3>Git commit history</h3>
+<p>The repository history (<code>git log --oneline --all</code>) is the evidence of individual work. Each member
+commits their own module from their own GitHub account. The log is attached in <code>06_Project_Management/git_log.txt</code>.</p>
+<h3>Contribution declaration</h3>
+<p>We confirm that the contributions listed above are accurate and that every member can explain the parts of the system
+they worked on.</p>
+<table>
+  <tr><th>Name</th><th>Reg. no.</th><th style="width:30%">Signature</th><th style="width:18%">Date</th></tr>
+  {% for m in team.members %}<tr><td>{{ m.name }}</td><td>{{ m.reg_no }}</td><td style="height:26px"></td><td></td></tr>{% endfor %}
+</table>

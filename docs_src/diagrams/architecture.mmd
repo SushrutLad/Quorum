@@ -1,0 +1,25 @@
+flowchart TB
+  subgraph Client["Presentation layer - Web browser"]
+    UI["HTML pages (Jinja2 templates)<br/>CSS + Chart.js"]
+  end
+  subgraph Server["Application layer - Python Flask"]
+    R1["routes_staff.py<br/>Admin & Employee pages"]
+    R2["routes_customer.py<br/>Customer portal"]
+    AU["auth.py<br/>Login + role check"]
+    BL["billing.py<br/>Slab bill calculation"]
+    DBH["db.py<br/>SQLite connection helper"]
+  end
+  subgraph Data["Data layer - SQLite (eums.db)"]
+    T["16 tables"]
+    TR["7 triggers"]
+    V["3 views"]
+  end
+  UI -- "HTTP GET / POST (forms)" --> R1 & R2
+  R1 & R2 --> AU
+  R1 --> BL
+  R1 & R2 --> DBH
+  BL --> DBH
+  DBH -- "SQL" --> T
+  T --- TR
+  T --- V
+  R1 & R2 -- "Rendered HTML" --> UI

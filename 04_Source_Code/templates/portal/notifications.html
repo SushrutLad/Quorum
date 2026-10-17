@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Notifications</h1><div class="muted">Bills, payments, outages and complaint updates</div></div>
+  {% if unread %}<form method="post"><button class="btn light">Mark all as read</button></form>{% endif %}</div>
+<div class="card">
+{% for n in notifications %}
+  <div class="notice {{ 'unread' if not n.is_read }}"><b>{{ n.title }}</b>{% if not n.is_read %} <span class="badge b-info">New</span>{% endif %}
+    <div>{{ n.message }}</div><div class="small muted">{{ n.created_at|nice_date }}</div></div>
+{% else %}<p class="empty">No notifications.</p>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+<h2>Meeting Log</h2>
+<p class="note">Fill the date, attendance and decisions for each meeting actually held. The agenda column lists what
+each meeting covered according to the project plan.</p>
+<table>
+  <tr><th style="width:5%">#</th><th style="width:13%">Date</th><th style="width:26%">Agenda</th><th>Decisions / action items</th><th style="width:16%">Attendees</th></tr>
+  {% for agenda, decision in [
+    ('Kick-off: topic, roles, process model', 'Chose Waterfall; same system for DBMS and SEPM; assigned roles; GitHub repo created.'),
+    ('Feasibility study review', 'Approved Python + Flask + SQLite; payment gateway to be simulated.'),
+    ('Requirements gathering', 'Listed actors and modules; studied sample electricity and water bills and slab tariffs.'),
+    ('SRS review and MoSCoW prioritisation', 'Froze SRS v1.0; 25 functional, 12 non-functional requirements.'),
+    ('Design review: ER diagram and schema', 'Accepted 16-table 3NF schema; bills keep a snapshot of charges.'),
+    ('Design review: triggers, UI mock-up', 'Business rules moved into triggers; UI based on UtiliPro mock-up.'),
+    ('Implementation check-in 1', 'Auth, customers, readings working; billing function unit tested.'),
+    ('Implementation check-in 2', 'End-to-end reading -> bill -> payment working; complaints and outages started.'),
+    ('Testing and mid-sem preparation', 'Tests written; report, diagrams and demo video tasks assigned.'),
+  ] %}
+  <tr><td>{{ loop.index }}</td><td></td><td>{{ agenda }}</td><td>{{ decision }}</td><td></td></tr>
+  {% endfor %}
+  <caption>Meeting log</caption>
+</table>
+<h2>Weekly Progress Record</h2>
+<table>
+  <tr><th style="width:8%">Week</th><th>Planned</th><th>Completed</th><th style="width:22%">Remarks</th></tr>
+  {% for wk, plan, done in [
+    ('1', 'Feasibility study', 'Feasibility report'), ('2', 'Requirements gathering', 'Actors, modules, FR draft'),
+    ('3', 'SRS, use cases, prioritisation', 'SRS v1.0 frozen'), ('4', 'Architecture, ER diagram', 'ER diagram, architecture'),
+    ('5', 'Schema, triggers, UML, UI design', 'schema.sql, UML, mock-up; project skeleton'),
+    ('6', 'Auth, customers, connections', 'Done'), ('7', 'Readings, billing, payments', 'End-to-end feature working'),
+    ('8', 'Complaints, outages, tariffs, dashboards; tests', 'Done; 20 tests passing; mid-sem report'),
+  ] %}
+  <tr><td>{{ wk }}</td><td>{{ plan }}</td><td>{{ done }}</td><td></td></tr>
+  {% endfor %}
+  <caption>Weekly progress</caption>
+</table>

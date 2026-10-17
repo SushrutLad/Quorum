@@ -1,0 +1,83 @@
+{% from "_macros.html" import icon %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}EUMS{% endblock %} - UtiliPro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">{{ icon('bolt', 28) }}<div><b>UtiliPro</b><span>Utility Management System</span></div></div>
+    <nav class="nav">
+      {% if session.role == 'customer' %}
+        {% set links = [
+          ('customer.dashboard', 'home', 'Dashboard'),
+          ('customer.connections', 'plug', 'My Connections'),
+          ('customer.bills', 'file', 'Bills & Payments'),
+          ('customer.usage', 'chart-line', 'Usage History'),
+          ('customer.complaints', 'clipboard', 'Complaints'),
+          ('customer.outages', 'alert', 'Outages'),
+          ('customer.profile', 'user', 'Profile'),
+          ('customer.notifications', 'bell', 'Notifications'),
+        ] %}
+      {% else %}
+        {% set links = [
+          ('staff.dashboard', 'home', 'Dashboard'),
+          ('staff.customers', 'users', 'Customers'),
+          ('staff.connections', 'plug', 'Connections'),
+          ('staff.readings', 'gauge', 'Meter Readings'),
+          ('staff.bills', 'file', 'Billing'),
+          ('staff.payments', 'card', 'Payments'),
+          ('staff.complaints', 'clipboard', 'Complaints'),
+          ('staff.outages', 'alert', 'Outages'),
+        ] %}
+        {% if session.role == 'admin' %}
+          {% set links = links + [
+            ('staff.employees', 'id', 'Employees'),
+            ('staff.tariffs', 'tag', 'Tariffs'),
+            ('staff.reports', 'chart', 'Reports'),
+          ] %}
+        {% endif %}
+      {% endif %}
+      {% for endpoint, ico, text in links %}
+        <a href="{{ url_for(endpoint) }}" class="{{ 'active' if (request.endpoint or '').startswith(endpoint.rstrip('s')) }}">
+          {{ icon(ico) }} {{ text }}
+          {% if endpoint == 'customer.notifications' and unread %}<span class="count">{{ unread }}</span>{% endif %}
+        </a>
+      {% endfor %}
+      <a href="{{ url_for('logout') }}">{{ icon('logout') }} Log out</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <form class="search" action="{{ url_for('customer.bills') if session.role == 'customer' else url_for('staff.customers') }}">
+        {% if session.role != 'customer' %}
+        <input name="q" placeholder="Search customers by name, code, area or phone..." aria-label="Search customers">
+        {% endif %}
+      </form>
+      <div class="user">
+        {% if session.role == 'customer' %}
+          <a href="{{ url_for('customer.notifications') }}" title="Notifications" style="color:var(--muted)">{{ icon('bell', 20) }}</a>
+        {% endif %}
+        <div class="avatar">{{ session.name[0] }}</div>
+        <div><b>{{ session.name }}</b><span>{{ {'admin': 'Administrator', 'employee': 'Employee', 'customer': 'Customer'}[session.role] }}</span></div>
+      </div>
+    </header>
+
+    <main class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/chart.umd.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

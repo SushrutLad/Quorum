@@ -1,0 +1,28 @@
+{% if not is_report %}<h2>Project Plan</h2>{% endif %}
+<h3>Original project plan</h3>
+<figure>{{ svg('gantt') }}<figcaption>Project schedule (Gantt chart) following the Waterfall phases</figcaption></figure>
+<table>
+  <tr><th>Week</th><th>Phase</th><th>Planned activities</th><th>Deliverable</th></tr>
+  <tr><td>1</td><td>Feasibility</td><td>Topic study, existing systems, technical/economic/operational/schedule feasibility</td><td>Feasibility report</td></tr>
+  <tr><td>2&ndash;3</td><td>Requirements</td><td>Stakeholders, functional and non-functional requirements, MoSCoW, use cases, user stories</td><td>SRS v1.0</td></tr>
+  <tr><td>4&ndash;5</td><td>Design</td><td>Architecture, ER diagram, normalised schema, triggers, UML, UI mock-up</td><td>Design document, schema.sql</td></tr>
+  <tr><td>5&ndash;7</td><td>Implementation I</td><td>Auth, customers, connections, readings, billing, payments</td><td>Working core (end-to-end feature)</td></tr>
+  <tr><td>8</td><td>Implementation II</td><td>Complaints, outages, tariffs, dashboards, notifications</td><td>Mid-semester build</td></tr>
+  <tr><td>8&ndash;9</td><td>Testing I</td><td>Unit and functional tests for completed modules</td><td>Test report v1</td></tr>
+  <tr><td>9&ndash;11</td><td>Implementation III</td><td>Reports, meter replacement, late fees, PDF invoice, MySQL port, CSRF</td><td>Feature-complete build</td></tr>
+  <tr><td>12&ndash;13</td><td>Testing II</td><td>System testing, UAT, performance test, bug fixing</td><td>Final test report</td></tr>
+  <tr><td>14</td><td>Deployment</td><td>Installation guide, final report, demo</td><td>Final submission</td></tr>
+  <caption>Week-wise plan</caption>
+</table>
+<h3>Effort and schedule estimation (Basic COCOMO)</h3>
+<p>The current build has {{ '{:,}'.format(loc) }} lines of code, so the finished system is estimated at about
+<b>{{ kloc }} KLOC</b>. It is a small project built by a small team with familiar requirements, so we use the
+<b>organic</b> mode (a = 2.4, b = 1.05, c = 2.5, d = 0.38):</p>
+<p class="formula">Effort E = 2.4 &times; ({{ kloc }})<sup>1.05</sup> = <b>{{ '%.1f'|format(effort) }} person-months</b>
+&nbsp;&nbsp;&nbsp; Duration D = 2.5 &times; E<sup>0.38</sup> = <b>{{ '%.1f'|format(duration) }} months</b>
+&nbsp;&nbsp;&nbsp; Staff = E / D &asymp; <b>{{ '%.1f'|format(people) }} full-time people</b></p>
+<p>Four students working part-time (about 6 hours a week each, roughly 0.15 of a full-time person) give about 0.6
+full-time equivalents over 3.5 months, which is about 2 person-months. That is much less than the COCOMO estimate.
+The gap is expected: COCOMO was calibrated on industrial projects that include full documentation, formal reviews and
+maintenance, and it overestimates very small projects that use a high-level framework. We use it as an upper bound and
+manage the gap through MoSCoW scoping (Should/Could features can be dropped without breaking the system).</p>

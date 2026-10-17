@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Bill {{ bill.bill_no }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Bill Details</h1>
+    <div class="crumbs"><a href="{{ back }}">Billing</a> / {{ bill.bill_no }}</div>
+  </div>
+  <div class="no-print" style="display:flex;gap:8px">
+    {% if session.role == 'customer' and bill.status != 'paid' %}
+      <a class="btn" href="{{ url_for('customer.pay', bill_id=bill.bill_id) }}">{{ icon('lock', 16) }} Pay {{ bill.outstanding|money }}</a>
+    {% endif %}
+    <button class="btn light" onclick="window.print()">{{ icon('download', 16) }} Print / Save PDF</button>
+  </div>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h2>Customer Information</h2>
+    <dl class="kv">
+      <dt>Name</dt><dd>{{ bill.customer_name }}</dd>
+      <dt>Customer ID</dt><dd>{{ bill.customer_code }}</dd>
+      <dt>Address</dt><dd>{{ bill.address }}, {{ bill.area }}</dd>
+      <dt>Connection</dt><dd>{{ bill.connection_no }} ({{ bill.utility }}, {{ bill.category|label }})</dd>
+      <dt>Meter</dt><dd>{{ bill.meter_no }}</dd>
+    </dl>
+  </div>
+  <div class="card">
+    <h2>Bill Information</h2>
+    <dl class="kv">
+      <dt>Bill ID</dt><dd>{{ bill.bill_no }}</dd>
+      <dt>Billing month</dt><dd>{{ bill.billing_month|month_name }}</dd>
+      <dt>Bill date</dt><dd>{{ bill.bill_date|nice_date }}</dd>
+      <dt>Due date</dt><dd>{{ bill.due_date|nice_date }}</dd>
+      <dt>Status</dt><dd>{{ badge(bill.status) }}</dd>
+    </dl>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Meter Reading</h2>
+  <dl class="kv">
+    <dt>Reading date</dt><dd>{{ bill.reading_date|nice_date }}</dd>
+    <dt>Previous / Current</dt><dd>{{ '%.1f'|format(bill.previous_value) }} &rarr; {{ '%.1f'|format(bill.reading_value) }}</dd>
+    <dt>Units consumed</dt><dd>{{ '%.1f'|format(bill.units) }} {{ bill.unit }}</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Description</th><th class="num">Units</th><th class="num">Rate (&#8377;)</th><th class="num">Amount (&#8377;)</th></tr></thead>
+    <tbody>
+    {% for i in items %}
+      <tr><td>{{ i.description }}</td>
+          <td class="num">{{ '%.1f'|format(i.units) if i.units is not none else '-' }}</td>
+          <td class="num">{{ '%.2f'|format(i.rate) if i.rate is not none else '-' }}</td>
+          <td class="num">{{ '%.2f'|format(i.amount) }}</td></tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr><td colspan="3" class="right">Total Amount</td><td class="num" style="color:var(--blue);font-size:17px">{{ bill.total_amount|money }}</td></tr>
+      <tr><td colspan="3" class="right">Paid</td><td class="num">{{ bill.amount_paid|money }}</td></tr>
+      <tr><td colspan="3" class="right">Outstanding</td><td class="num">{{ bill.outstanding|money }}</td></tr>
+    </tfoot>
+  </table>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Payments</h2>
+  {% if payments %}
+  <table>
+    <thead><tr><th>Receipt</th><th>Date</th><th>Method</th><th class="num">Amount</th></tr></thead>
+    <tbody>{% for p in payments %}
+      <tr><td>{{ p.receipt_no }}</td><td>{{ p.paid_at|nice_date }}</td><td>{{ p.method|method_name }}</td><td class="num">{{ p.amount|money }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+  {% else %}<p class="muted">No payments yet.</p>{% endif %}
+
+  {% if session.role != 'customer' and bill.status != 'paid' %}
+  <form class="inline-form no-print" method="post" action="{{ url_for('staff.bill_pay', bill_id=bill.bill_id) }}" style="margin-top:14px">
+    <label for="amount" style="margin:0">Record counter (cash) payment &#8377;</label>
+    <input id="amount" name="amount" type="number" step="0.01" min="0.01" value="{{ '%.2f'|format(bill.outstanding) }}" style="width:140px">
+    <button class="btn small">Record</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

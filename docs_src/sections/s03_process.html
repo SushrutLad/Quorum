@@ -1,0 +1,63 @@
+<h2>Software Process Model and Feasibility Study</h2>
+<h3>Choice of process model: Waterfall</h3>
+<p>We follow the classical <b>Waterfall model</b>: each phase produces a document that is reviewed and frozen before the
+next phase starts. Waterfall suits this project because:</p>
+<ul>
+  <li>The requirements are <b>well understood and stable</b>: the domain, metering, slab billing and payments, follows
+      published tariff rules and the scope was fixed by the course.</li>
+  <li>The DBMS course needs a <b>complete database design up front</b> (ER model, normalisation), which matches
+      Waterfall's design-before-code approach.</li>
+  <li>The course has <b>fixed milestones</b> (mid-semester and end-semester), which map naturally onto phase
+      completion.</li>
+  <li>The team is new to web development, so a <b>clear, documented sequence</b> of phases is easier to manage than
+      iterative sprints.</li>
+</ul>
+<figure style="max-width:88%;margin:12px auto">{{ svg('waterfall') }}<figcaption>Waterfall phases and their status at mid-semester</figcaption></figure>
+<table>
+  <tr><th>Phase</th><th>Output (deliverable)</th><th>Status at mid-sem</th></tr>
+  <tr><td>1. Feasibility study</td><td>Feasibility report (section 3.2)</td><td><span class="tag done">Complete</span></td></tr>
+  <tr><td>2. Requirements analysis</td><td>SRS: functional / non-functional requirements, use cases (sections 6&ndash;7, SRS.pdf)</td><td><span class="tag done">Complete</span></td></tr>
+  <tr><td>3. System design</td><td>Architecture, ER model, schema, UML, UI design (section 8)</td><td><span class="tag done">Complete</span></td></tr>
+  <tr><td>4. Implementation</td><td>Working Flask + SQLite application (section 10)</td><td><span class="tag wip">About 60% complete</span></td></tr>
+  <tr><td>5. Testing</td><td>Unit and functional test suite (section 11)</td><td><span class="tag wip">Started: 20 automated tests</span></td></tr>
+  <tr><td>6. Deployment</td><td>Installed system, user guide</td><td><span class="tag todo">Planned</span></td></tr>
+  <tr><td>7. Maintenance</td><td>Bug fixes, enhancements</td><td><span class="tag todo">Planned</span></td></tr>
+  <caption>Waterfall phases, deliverables and status</caption>
+</table>
+<p>Because pure Waterfall makes it costly to find mistakes late, we added two small safeguards: each phase ends with a
+team review against the previous phase's document, and unit tests were written alongside implementation instead of only at
+the end. The overall flow remains sequential.</p>
+
+<h3>Feasibility study</h3>
+<h4>Technical feasibility</h4>
+<p>The system needs only a web server, a relational database and a browser. We use Python with the Flask framework and
+SQLite, which are free, run on any laptop (Windows, Linux or macOS) and need no separate database server. SQLite supports
+everything the DBMS part needs: primary/foreign keys, CHECK and UNIQUE constraints, triggers, views and indexes. Team
+members already know Python and SQL from earlier courses; Flask and HTML templates can be learned in a few days.
+<b>Conclusion: technically feasible.</b></p>
+<h4>Economic feasibility</h4>
+<table>
+  <tr><th>Item</th><th>Cost</th><th>Remark</th></tr>
+  <tr><td>Software (Python, Flask, SQLite, VS Code, Git/GitHub, Chart.js)</td><td>&#8377;0</td><td>All open source / free</td></tr>
+  <tr><td>Hardware</td><td>&#8377;0</td><td>Team members' existing laptops</td></tr>
+  <tr><td>Hosting for demo (optional)</td><td>&#8377;0</td><td>Runs locally; free tiers exist if needed</td></tr>
+  <tr><td>Payment gateway</td><td>&#8377;0</td><td>Simulated in this version; real gateways charge per transaction</td></tr>
+  <tr><td>Effort</td><td>4 students &times; ~6 h/week &times; 14 weeks</td><td>About 336 person-hours</td></tr>
+  <caption>Economic feasibility (development cost)</caption>
+</table>
+<p>For a real utility office, the main benefits are fewer billing errors, faster collection and less manual data
+entry, at negligible software cost. <b>Conclusion: economically feasible.</b></p>
+<h4>Operational feasibility</h4>
+<p>The users are office staff, field meter readers and customers, all of whom already use smartphones and UPI apps. The
+interface uses simple forms, one page per task, with the same layout as common billing portals. Validation messages
+are shown in plain language (for example "Reading cannot be lower than the previous reading"). Little training is
+needed. <b>Conclusion: operationally feasible.</b></p>
+<h4>Schedule feasibility</h4>
+<p>The semester has about 14 working weeks. The plan (section 12) gives roughly 4 weeks to feasibility, requirements and
+design, 6 weeks to implementation and 4 weeks to testing, deployment and documentation. Core features were finished
+by mid-semester, so the schedule is realistic. <b>Conclusion: feasible within the semester.</b></p>
+<h4>Legal and ethical feasibility</h4>
+<p>Only sample (fictional) customer data is used. Passwords are stored as salted hashes, and customers can see only their
+own data. A production version would need to follow the Digital Personal Data Protection Act, 2023 (consent and data
+minimisation) and RBI/PCI rules for payment data; our simulated gateway stores no card or UPI details.
+<b>Conclusion: feasible for an academic prototype.</b></p>

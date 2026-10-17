@@ -1,0 +1,10 @@
+{% if not is_report %}<h2>UML Diagrams</h2>{% endif %}
+<h3>Sequence diagram &ndash; meter reading to bill to payment</h3>
+<p>This is the main end-to-end flow and the one shown in the demo video.</p>
+<figure class="tall">{{ svg('sequence') }}<figcaption>Sequence diagram: record reading, generate bill, pay bill</figcaption></figure>
+<h3>Activity diagram &ndash; online bill payment</h3>
+<figure>{{ svg("activity") }}<figcaption>Activity diagram for paying a bill</figcaption></figure>
+<h3>Class diagram (domain model)</h3>
+<p>The application is written in a procedural Flask style, so these classes are the <i>domain model</i>: each class is a
+database table, and the operations are carried out by route functions and <code>billing.py</code>.</p>
+<figure class="tall">{{ svg('class') }}<figcaption>Class diagram of the main domain entities</figcaption></figure>

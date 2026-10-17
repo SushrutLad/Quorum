@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block title %}Complaints{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Complaints</h1><div class="muted">Customer complaints and their resolution</div></div></div>
+<div class="card">
+  <div class="tabs">
+    {% for s, text in [('', 'All'), ('open', 'Open'), ('in_progress', 'In Progress'), ('resolved', 'Resolved')] %}
+      <a href="{{ url_for('staff.complaints', status=s) }}" class="{{ 'active' if status == s }}">{{ text }} ({{ counts.get(s, 0) }})</a>{% endfor %}
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Customer</th><th>Utility</th><th>Issue</th><th>Status</th><th>Priority</th><th>Assigned to</th><th>Created on</th><th></th></tr></thead>
+    <tbody>{% for c in complaints %}
+      <tr><td>{{ c.complaint_no }}</td><td>{{ c.full_name }}</td><td>{{ c.utility or '-' }}</td><td>{{ c.issue }}</td>
+          <td>{{ badge(c.status) }}</td><td>{{ badge(c.priority) }}</td><td>{{ c.assignee or '-' }}</td>
+          <td class="nowrap">{{ c.created_at|nice_date }}</td>
+          <td><a class="btn light small" href="{{ url_for('staff.complaint_detail', complaint_id=c.complaint_id) }}">View</a></td></tr>
+    {% else %}<tr><td colspan="9" class="empty">No complaints here.</td></tr>{% endfor %}</tbody>
+  </table></div>
+</div>
+{% endblock %}

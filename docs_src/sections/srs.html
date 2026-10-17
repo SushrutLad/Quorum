@@ -1,0 +1,104 @@
+<table class="kv">
+  <tr><td>Document</td><td>Software Requirements Specification (IEEE 830 structure)</td></tr>
+  <tr><td>Version</td><td>1.0 (baselined at end of Requirements phase; status columns updated at mid-semester)</td></tr>
+  <tr><td>Product</td><td>{{ team.project_title }}</td></tr>
+</table>
+
+<h2>Introduction</h2>
+<h3>Purpose</h3>
+<p>This document specifies the requirements of the Energy &amp; Utility Management System (EUMS). It is the agreed
+baseline between the development team and the course instructor, and it is the input to the design, implementation and
+testing phases of our Waterfall process.</p>
+<h3>Scope</h3>
+<p>EUMS is a web application for a utility office that supplies electricity, water and piped gas. It manages customers,
+connections and meters, records meter readings, generates slab-based bills automatically, accepts payments, and
+handles complaints and outages. It provides a staff portal (administrator and employees) and a customer self-service
+portal. Real payment gateways, smart meters, SMS/e-mail and mobile apps are out of scope.</p>
+<h3>Definitions and abbreviations</h3>
+<table>
+  <tr><th style="width:22%">Term</th><th>Meaning</th></tr>
+  <tr><td>Connection</td><td>A customer's supply of one utility at their address</td></tr>
+  <tr><td>Meter reading</td><td>The cumulative value shown on a meter on a date</td></tr>
+  <tr><td>Consumption</td><td>Current reading &minus; previous reading</td></tr>
+  <tr><td>Slab tariff</td><td>Progressive pricing: each band of units has its own rate</td></tr>
+  <tr><td>Fixed charge</td><td>Monthly charge independent of usage</td></tr>
+  <tr><td>Outstanding</td><td>Bill total &minus; amount already paid</td></tr>
+  <tr><td>kWh / kL / SCM</td><td>Units for electricity / water (kilolitre) / gas (standard cubic metre)</td></tr>
+  <tr><td>RBAC</td><td>Role-based access control</td></tr>
+  <tr><td>MoSCoW</td><td>Must / Should / Could / Won't prioritisation</td></tr>
+</table>
+<h3>References</h3>
+<p>IEEE Std 830-1998; course brief for the DBMS and SEPM projects; state electricity tariff orders (LMV-1/LMV-2) used as a
+model for slab structure.</p>
+<h3>Overview</h3>
+<p>Section 2 describes the product in general terms. Section 3 lists interfaces. Sections 4&ndash;6 give the functional,
+non-functional and data requirements.</p>
+
+<h2>Overall Description</h2>
+<h3>Product perspective</h3>
+<p>EUMS is a new, self-contained system that replaces paper registers and spreadsheets. It is a three-tier web
+application (browser, Flask server, SQLite database).</p>
+<figure>{{ svg('dfd') }}<figcaption>Context diagram</figcaption></figure>
+<h3>Product functions</h3>
+<ul>
+  <li>Manage users, customers, employees, connections and meters.</li>
+  <li>Record meter readings with validation; generate itemised slab-based bills.</li>
+  <li>Accept online and counter payments, including partial payments, and issue receipts.</li>
+  <li>Manage complaints and outages; notify customers.</li>
+  <li>Maintain tariffs; show dashboards and reports.</li>
+</ul>
+<h3>User classes and characteristics</h3>
+<table>
+  <tr><th>User class</th><th>Characteristics</th><th>Access</th></tr>
+  <tr><td>Administrator</td><td>Office manager; moderate computer skills</td><td>Everything, including tariffs, employees, reports</td></tr>
+  <tr><td>Employee</td><td>Meter reader, billing officer or technician; basic skills; may use a phone in the field</td><td>Customers, connections, readings, billing, payments, complaints, outages</td></tr>
+  <tr><td>Customer</td><td>General public, residential or commercial; uses UPI apps</td><td>Only their own connections, bills, usage, complaints, outages in their area</td></tr>
+</table>
+<h3>Operating environment</h3>
+<p>Server: any PC with Python 3.10+ and Flask (Windows, Linux or macOS). Client: any modern browser (Chrome, Edge, Firefox)
+on desktop or phone. Database: SQLite 3 file.</p>
+<h3>Design and implementation constraints</h3>
+<ul>
+  <li>Free and open-source software only; must run on a student laptop without a database server.</li>
+  <li>Relational database with constraints, triggers and views (DBMS course requirement).</li>
+  <li>No passwords, API keys or real personal data in the source code or sample data.</li>
+</ul>
+<h3>Assumptions and dependencies</h3>
+<ul>
+  <li>One connection per utility per customer; one active meter per connection; meters are cumulative.</li>
+  <li>Tariff depends only on the utility and the customer category (residential / commercial).</li>
+  <li>Bills are due 15 days after the bill date. Payment gateway is simulated.</li>
+</ul>
+
+<h2>External Interface Requirements</h2>
+<h3>User interfaces</h3>
+<p>Web pages with a left navigation menu by role, a top bar with the user's name, cards for summaries, tables for lists
+and simple forms. Errors are shown as red messages at the top of the page; successes in green. Layout adapts to
+screens narrower than 800&nbsp;px.</p>
+<h3>Software interfaces</h3>
+<p>Python Flask 3 web framework; SQLite 3 via Python's <code>sqlite3</code> module; Chart.js 4 in the browser. A JSON
+endpoint <code>GET /staff/api/meters/&lt;id&gt;</code> returns the previous reading for the reading form.</p>
+<h3>Communication interfaces</h3>
+<p>HTTP between browser and server (HTTPS in a production deployment). Session cookie signed with a secret key.</p>
+
+<h2>Functional Requirements</h2>
+{% include "fr_table.html" %}
+<p>Detailed use-case descriptions and user stories with acceptance criteria are in
+<code>02_Requirements/Use_Cases_or_User_Stories.pdf</code>.</p>
+<figure style="max-width:80%;margin:auto">{{ svg('usecase') }}<figcaption>Use-case diagram</figcaption></figure>
+
+<h2>Non-Functional Requirements</h2>
+{% include "nfr_table.html" %}
+
+<h2>Data Requirements</h2>
+<p>The system stores the following entities: users, customers, employees, utilities, tariff plans and slabs, connections,
+meters, meter readings, bills and bill items, payments, complaints, outages, notifications and an activity log. Key
+business rules on data:</p>
+<ul>
+  <li>BR-1: A meter reading must be &ge; the previous reading of the same meter, and later in date.</li>
+  <li>BR-2: Exactly one bill per meter reading; bill charges are fixed once issued.</li>
+  <li>BR-3: Total payments on a bill can never exceed the bill total. Status is unpaid, partial or paid.</li>
+  <li>BR-4: Customer email, customer code, connection number, meter number, bill number and receipt number are unique.</li>
+  <li>BR-5: A customer has at most one connection per utility.</li>
+</ul>
+<figure>{{ svg('er') }}<figcaption>Logical data model (ER diagram)</figcaption></figure>

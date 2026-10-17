@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Dashboard</h1><div class="muted">Overview of electricity, water and gas services</div></div>
+  <span class="badge b-info">Latest billing month: {{ current|month_name }}</span>
+</div>
+
+{% set change = ((kpi.billed_now - kpi.billed_before) / kpi.billed_before * 100) if kpi.billed_before else 0 %}
+<div class="grid g6">
+  <div class="card kpi"><div class="label">Total Customers</div><div class="value">{{ icon('users', 24) }}{{ kpi.customers }}</div><div class="note">registered accounts</div></div>
+  <div class="card kpi"><div class="label">Active Connections</div><div class="value">{{ icon('plug', 24) }}{{ kpi.connections }}</div><div class="note">electricity, water, gas</div></div>
+  <div class="card kpi"><div class="label">Billed This Month</div><div class="value">{{ icon('chart', 24) }}{{ kpi.billed_now|money }}</div>
+    <div class="note {{ 'up' if change >= 0 else 'bad' }}">{{ '%+.1f'|format(change) }}% vs last month</div></div>
+  <div class="card kpi"><div class="label">Pending Payments</div><div class="value">{{ icon('file', 24) }}{{ kpi.pending_amount|money }}</div><div class="note">{{ kpi.pending_bills }} bills pending</div></div>
+  <div class="card kpi"><div class="label">Open Complaints</div><div class="value">{{ icon('clipboard', 24) }}{{ kpi.open_complaints }}</div><div class="note bad">{{ kpi.high_priority }} high priority</div></div>
+  <div class="card kpi"><div class="label">Active Outages</div><div class="value">{{ icon('alert', 24) }}{{ kpi.active_outages }}</div><div class="note bad">{{ kpi.affected }} customers affected</div></div>
+</div>
+
+<div class="grid g3" style="margin-top:16px">
+  <div class="card">
+    <h2>Amount Billed per Utility (last 6 months)</h2>
+    <div class="chart-box"><canvas id="billedChart" aria-label="Amount billed per utility by month"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>Payments Collected by Utility</h2>
+    <div class="chart-box"><canvas id="splitChart" aria-label="Payments collected by utility"></canvas></div>
+    <p class="small muted" style="margin:10px 0 0">Total collected: <b>{{ kpi.collected|money }}</b></p>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Recent Activities</h2></div>
+    <ul class="activity">
+      {% for a in activity %}
+      <li><span class="dot">{{ icon('bell', 16) }}</span><div><b>{{ a.action }}</b><div class="small muted">{{ a.details }}</div></div><time>{{ a.created_at|nice_date }}</time></li>
+      {% else %}<li class="muted">No activity yet.</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  lineChart("billedChart", {{ chart.months|tojson }}, {{ chart.series|tojson }});
+  const split = {{ split|tojson }};
+  doughnut("splitChart", split.map(s => s.utility), split.map(s => s.amount), split.map(s => UTILITY_COLORS[s.utility]));
+</script>
+{% endblock %}

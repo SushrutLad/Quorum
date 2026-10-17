@@ -1,0 +1,23 @@
+{% if not is_report %}<h2>System Architecture</h2>{% endif %}
+<h3>Architecture diagram</h3>
+<p>EUMS uses a <b>three-tier (layered) client&ndash;server architecture</b> with the Model-View-Controller idea:
+templates are the <i>view</i>, Flask route functions are the <i>controller</i>, and the SQLite tables with
+<code>billing.py</code> form the <i>model</i>. The browser sends ordinary HTTP GET/POST requests (HTML forms); the server
+returns finished HTML pages. One small JSON endpoint gives the previous meter reading to the reading form.</p>
+<figure class="tall">{{ svg('architecture') }}<figcaption>Three-tier architecture of EUMS</figcaption></figure>
+<figure style="max-width:85%;margin:auto">{{ svg('dfd') }}<figcaption>Context-level (Level 0) data flow diagram</figcaption></figure>
+<h3>Module description</h3>
+<table>
+  <tr><th style="width:22%">File / module</th><th>Responsibility</th></tr>
+  <tr><td><code>app.py</code></td><td>Creates the Flask app, loads configuration, registers the two route groups, login/logout pages, error pages, and template helpers (money, date formatting).</td></tr>
+  <tr><td><code>auth.py</code></td><td><code>login_required(*roles)</code> decorator: redirects to login if not signed in, returns 403 if the role is not allowed.</td></tr>
+  <tr><td><code>db.py</code></td><td>Opens one SQLite connection per request (foreign keys on, rows as dictionaries) and closes it afterwards; <code>query()</code> helper.</td></tr>
+  <tr><td><code>billing.py</code></td><td>Pure function <code>calculate_bill()</code> for slab pricing (unit tested) and <code>generate_bill()</code>, which reads the tariff and inserts the bill and bill items.</td></tr>
+  <tr><td><code>routes_staff.py</code></td><td>Admin and employee pages: dashboard, customers, connections, meter readings, billing, payments, complaints, outages, tariffs, employees, reports.</td></tr>
+  <tr><td><code>routes_customer.py</code></td><td>Customer portal: dashboard, connections, bills, pay, usage history, complaints, outages, profile, notifications. Every query is filtered by the logged-in customer.</td></tr>
+  <tr><td><code>schema.sql</code></td><td>All tables, constraints, indexes, triggers and views.</td></tr>
+  <tr><td><code>seed.py</code></td><td>Creates the database and loads demo data (24 customers from <code>sample_data/customers.csv</code>, 6 months of readings, bills, payments, complaints, outages).</td></tr>
+  <tr><td><code>templates/</code>, <code>static/</code></td><td>Jinja2 HTML pages (one per feature), one CSS file, and a small Chart.js helper.</td></tr>
+  <tr><td><code>tests/</code></td><td>pytest unit tests (billing) and functional tests (whole app with a fresh database per test).</td></tr>
+  <caption>Modules</caption>
+</table>

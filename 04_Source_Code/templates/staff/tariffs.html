@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Tariffs{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Tariffs</h1><div class="muted">Slab rates used to calculate bills. Changes affect only new bills - old bills keep the rates they were issued with.</div></div></div>
+<div class="grid g2">
+{% for p in plans %}
+  <form class="card" method="post">
+    <input type="hidden" name="tariff_id" value="{{ p.tariff_id }}">
+    <div class="card-head"><h2>{{ p.name }}</h2><span class="badge b-info">{{ p.utility }} &middot; {{ p.category|label }}</span></div>
+    <table>
+      <thead><tr><th>Slab ({{ p.unit }})</th><th class="num">Rate (&#8377; per {{ p.unit }})</th></tr></thead>
+      <tbody>{% for s in slabs[p.tariff_id] %}
+        <tr><td>{{ '%g'|format(s.from_unit) }} {{ ('- ' ~ '%g'|format(s.to_unit)) if s.to_unit is not none else 'and above' }}</td>
+            <td class="num"><input name="rate_{{ s.slab_id }}" type="number" step="0.01" min="0" value="{{ '%.2f'|format(s.rate) }}" style="width:110px;text-align:right" aria-label="Rate"></td></tr>
+      {% endfor %}</tbody>
+    </table>
+    <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-top:12px">
+      <div><label>Fixed charge (&#8377;)</label><input name="fixed_charge" type="number" step="0.01" min="0" value="{{ '%.2f'|format(p.fixed_charge) }}"></div>
+      <div><label>Tax / duty (%)</label><input name="tax_percent" type="number" step="0.01" min="0" value="{{ '%g'|format(p.tax_percent) }}"></div>
+    </div>
+    <div class="actions"><button class="btn small">Save</button></div>
+  </form>
+{% endfor %}
+</div>
+{% endblock %}

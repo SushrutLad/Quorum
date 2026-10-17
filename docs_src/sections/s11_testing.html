@@ -1,0 +1,33 @@
+<h2>Testing Performed</h2>
+<p>Testing so far consists of <b>unit tests</b> for the billing calculation and <b>functional (integration) tests</b>
+that drive the real Flask application through its pages with a fresh, seeded SQLite database for each test. All tests
+are automated with pytest and can be re-run with <code>python -m pytest -v</code> in <code>04_Source_Code</code>. The
+actual results below were produced by running the suite: <b>{{ summary }}</b>. Manual exploratory testing of every
+page was also done for each role (screenshots in Appendix B).</p>
+<h3>Test-case table</h3>
+<table>
+  <tr><th style="width:7%">ID</th><th style="width:15%">Feature</th><th style="width:25%">Input / steps</th><th>Expected result</th><th style="width:15%">Actual result</th><th style="width:7%">Status</th></tr>
+  {% for id, fn, feature, inp, expected in tests %}
+  {% set r = results.get(fn, 'NOT RUN') %}
+  <tr><td>{{ id }}</td><td>{{ feature }}</td><td>{{ inp }}</td><td>{{ expected }}</td>
+      <td>{{ 'As expected' if r == 'PASS' else 'See pytest output' }}</td>
+      <td class="{{ 'pass' if r == 'PASS' else 'fail' }}">{{ r }}</td></tr>
+  {% endfor %}
+  <caption>Test cases with expected and actual results (UT = unit test, IT = integration/functional test)</caption>
+</table>
+<h3>Evidence</h3>
+<p>The full pytest log is in <code>05_Testing/Test_Evidence/pytest_output.txt</code>. The screenshots below show the
+same rules being enforced in the user interface.</p>
+<div class="two">
+  <figure><img src="{{ shot('07b_reading_invalid') }}"><figcaption>IT-07: lower reading blocked</figcaption></figure>
+  <figure><img src="{{ shot('26_customer_forbidden') }}"><figcaption>IT-04: customer opening a staff page gets 403</figcaption></figure>
+  <figure><img src="{{ shot('23_notifications') }}"><figcaption>Trigger-generated notifications for the customer</figcaption></figure>
+  <figure><img src="{{ shot('22_my_outages') }}"><figcaption>IT-11: outage shown to customers in that area</figcaption></figure>
+</div>
+<h3>Testing still to be done</h3>
+<ul>
+  <li>System testing of the complete workflow by a person outside the team, with a written checklist.</li>
+  <li>Boundary tests for forms (very long text, special characters) and a basic security test (SQL injection attempts; all queries are already parameterised).</li>
+  <li>Performance check with 1,000+ customers of generated data (NFR-07).</li>
+  <li>User-acceptance testing with 3&ndash;5 classmates acting as customers and employees.</li>
+</ul>

@@ -1,0 +1,38 @@
+{# Small inline SVG icons (Feather-style) and reusable bits #}
+{% set ICONS = {
+  'home': '<path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/>',
+  'users': '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16.5 14.2c2.9.2 5 2.3 5 5.8"/>',
+  'plug': '<path d="M9 2v6M15 2v6M6 8h12v3a6 6 0 0 1-12 0zM12 17v5"/>',
+  'gauge': '<path d="M3.5 18a9 9 0 1 1 17 0"/><path d="m12 13 4-5"/><circle cx="12" cy="13" r="1.5"/>',
+  'file': '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/>',
+  'card': '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>',
+  'alert': '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/>',
+  'bolt': '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+  'drop': '<path d="M12 2.5S5 10 5 14.5a7 7 0 0 0 14 0C19 10 12 2.5 12 2.5z"/>',
+  'flame': '<path d="M12 22a7 7 0 0 0 7-7c0-4-3-6-4-9-1 2-2 3-3 3 0-2-1-4-3-6 0 4-4 7-4 12a7 7 0 0 0 7 7z"/>',
+  'id': '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="11" r="2.5"/><path d="M5.5 17c.6-1.8 2-2.8 3.5-2.8s2.9 1 3.5 2.8M15 9h3M15 13h3"/>',
+  'tag': '<path d="M3 3h8l10 10-8 8L3 11z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  'chart': '<path d="M3 3v18h18"/><path d="M7 15v3M12 10v8M17 6v12"/>',
+  'chart-line': '<path d="M3 3v18h18"/><path d="m7 14 4-4 4 3 5-6"/>',
+  'user': '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+  'bell': '<path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  'rupee': '<path d="M6 4h12M6 9h12M14 4c3 0 3 10-3 10H7l8 7"/>',
+  'clipboard': '<rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 2h6v4H9zM9 12h6M9 16h4"/>',
+  'search': '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  'logout': '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  'plus': '<path d="M12 5v14M5 12h14"/>',
+  'download': '<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>',
+  'lock': '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+} %}
+
+{% macro icon(name, size=18) -%}
+<svg width="{{ size }}" height="{{ size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ ICONS.get(name, '')|safe }}</svg>
+{%- endmacro %}
+
+{% macro utility_icon(utility, size=20) -%}
+{{ icon({'Electricity': 'bolt', 'Water': 'drop', 'Gas': 'flame'}[utility], size) }}
+{%- endmacro %}
+
+{% macro badge(status, text=None) -%}
+<span class="badge b-{{ status }}">{{ text or status|label }}</span>
+{%- endmacro %}

@@ -1,0 +1,8 @@
+flowchart LR
+  Cust[/Customer/] -- "complaints, payments" --> P((EUMS))
+  P -- "bills, receipts, alerts" --> Cust
+  Emp[/Employee/] -- "meter readings, cash payments, complaint updates" --> P
+  P -- "work lists, bill details" --> Emp
+  Adm[/Admin/] -- "tariffs, employees, outages" --> P
+  P -- "dashboard, reports" --> Adm
+  P <--> D[(SQLite database)]

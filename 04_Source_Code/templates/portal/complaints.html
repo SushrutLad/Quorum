@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block title %}Complaints{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Complaints</h1><div class="muted">Raise a new complaint or track an old one</div></div></div>
+<div class="grid g3">
+  <form class="card" method="post"><h2>New Complaint</h2>
+    <label for="connection_id">Connection</label><select id="connection_id" name="connection_id">
+      {% for c in connections %}<option value="{{ c.connection_id }}">{{ c.utility }} - {{ c.connection_no }}</option>{% endfor %}</select>
+    <label for="issue" style="margin-top:12px">Issue</label><input id="issue" name="issue" placeholder="e.g. Low water pressure" required>
+    <label for="description" style="margin-top:12px">Details</label><textarea id="description" name="description" rows="3"></textarea>
+    <label for="priority" style="margin-top:12px">Urgency</label><select id="priority" name="priority">
+      <option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
+    <div class="actions"><button class="btn">Submit Complaint</button></div>
+  </form>
+  <div class="card span2"><h2>My Complaints</h2><div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Utility</th><th>Issue</th><th>Status</th><th>Created</th><th>Resolution</th></tr></thead>
+    <tbody>{% for c in complaints %}
+      <tr><td>{{ c.complaint_no }}</td><td>{{ c.utility or '-' }}</td><td>{{ c.issue }}</td><td>{{ badge(c.status) }}</td><td class="nowrap">{{ c.created_at|nice_date }}</td><td>{{ c.resolution or '-' }}</td></tr>
+    {% else %}<tr><td colspan="6" class="empty">No complaints yet.</td></tr>{% endfor %}</tbody>
+  </table></div></div>
+</div>
+{% endblock %}

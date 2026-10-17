@@ -1,0 +1,60 @@
+{% if not is_report %}<h2>Database Design</h2>{% endif %}
+<h3>ER diagram and data model</h3>
+<figure class="tall">{{ svg("er") }}<figcaption>Entity&ndash;relationship diagram (crow's-foot notation)</figcaption></figure>
+<table>
+  <tr><th style="width:18%">Table</th><th>Purpose</th><th style="width:34%">Keys and important constraints</th></tr>
+  <tr><td>users</td><td>Login account for every person</td><td>PK user_id; UNIQUE username; CHECK role IN (admin, employee, customer)</td></tr>
+  <tr><td>customers</td><td>Customer profile</td><td>PK customer_id; FK user_id UNIQUE (1:1); UNIQUE customer_code, email; CHECK category</td></tr>
+  <tr><td>employees</td><td>Staff profile</td><td>PK employee_id; FK user_id UNIQUE; UNIQUE emp_code</td></tr>
+  <tr><td>utilities</td><td>Electricity / Water / Gas and their units</td><td>PK utility_id; UNIQUE name</td></tr>
+  <tr><td>tariff_plans</td><td>Fixed charge and tax for a utility + category</td><td>PK tariff_id; FK utility_id; UNIQUE (utility_id, category)</td></tr>
+  <tr><td>tariff_slabs</td><td>Rate per unit range</td><td>PK slab_id; FK tariff_id ON DELETE CASCADE; CHECK to_unit &gt; from_unit</td></tr>
+  <tr><td>connections</td><td>A customer's service for one utility</td><td>PK; FK customer, utility, tariff; UNIQUE (customer_id, utility_id)</td></tr>
+  <tr><td>meters</td><td>Physical meter on a connection</td><td>PK; UNIQUE meter_no; CHECK status; initial_reading &ge; 0</td></tr>
+  <tr><td>meter_readings</td><td>Cumulative reading on a date</td><td>PK; FK meter_id; UNIQUE (meter_id, reading_date); CHECK consumption &ge; 0</td></tr>
+  <tr><td>bills</td><td>Bill for one reading (snapshot of charges)</td><td>PK; UNIQUE bill_no, reading_id (1:1 with reading); CHECK status</td></tr>
+  <tr><td>bill_items</td><td>Itemised lines of a bill</td><td>PK; FK bill_id ON DELETE CASCADE</td></tr>
+  <tr><td>payments</td><td>Money received against a bill</td><td>PK; UNIQUE receipt_no; CHECK amount &gt; 0; CHECK method</td></tr>
+  <tr><td>complaints</td><td>Customer complaints</td><td>PK; FK customer, connection, assigned employee; CHECK priority, status</td></tr>
+  <tr><td>outages</td><td>Supply interruptions by area</td><td>PK; FK utility_id; CHECK status</td></tr>
+  <tr><td>notifications</td><td>In-app messages to a user</td><td>PK; FK user_id; index (user_id, is_read)</td></tr>
+  <tr><td>audit_log</td><td>Recent activity feed for the dashboard</td><td>PK log_id</td></tr>
+  <caption>Tables in the schema (16)</caption>
+</table>
+<h3>Normalisation</h3>
+<ul>
+  <li><b>1NF:</b> every column holds one atomic value; repeating data (many readings, many payments, many slabs) is in its own table, not in repeated columns.</li>
+  <li><b>2NF:</b> every table has a single-column surrogate primary key, so there are no partial dependencies. For natural composite keys such as (meter_id, reading_date), the non-key columns depend on the whole key.</li>
+  <li><b>3NF / BCNF:</b> there are no transitive dependencies. For example, tariff rates are not stored in <code>connections</code>; a connection points to a tariff plan and the plan points to its slabs. Utility units live only in <code>utilities</code>.</li>
+  <li><b>Deliberate denormalisation:</b> <code>bills</code> stores units, energy charge, fixed charge, tax and total at the time the bill is issued. Tariffs change over time, but an issued bill is a legal record and must never change. <code>meter_readings.consumption</code> is also stored so that a reading row is self-explanatory and cannot drift.</li>
+</ul>
+<h3>Triggers, views and indexes</h3>
+<table>
+  <tr><th style="width:24%">Object</th><th style="width:14%">Type</th><th>Rule enforced</th></tr>
+  <tr><td>trg_reading_monotonic</td><td>BEFORE INSERT</td><td>Rejects a reading lower than the meter's highest reading (or initial reading).</td></tr>
+  <tr><td>trg_reading_date_order</td><td>BEFORE INSERT</td><td>Rejects a reading dated on/before the last reading date.</td></tr>
+  <tr><td>trg_no_overpay</td><td>BEFORE INSERT</td><td>Rejects a payment larger than the bill's outstanding amount.</td></tr>
+  <tr><td>trg_payment_status</td><td>AFTER INSERT</td><td>Adds to amount_paid, sets status paid/partial, notifies customer, logs activity.</td></tr>
+  <tr><td>trg_bill_notify</td><td>AFTER INSERT</td><td>Notifies the customer when a bill is generated.</td></tr>
+  <tr><td>trg_outage_notify</td><td>AFTER INSERT</td><td>Notifies every customer in the outage area who has that utility.</td></tr>
+  <tr><td>trg_complaint_status</td><td>AFTER UPDATE</td><td>Notifies the customer when complaint status changes.</td></tr>
+  <tr><td>v_bill_summary</td><td>View</td><td>Bill joined with connection, utility and customer, with outstanding amount.</td></tr>
+  <tr><td>v_overdue_bills</td><td>View</td><td>Unpaid bills past due date, with days overdue.</td></tr>
+  <tr><td>v_monthly_consumption</td><td>View</td><td>Total units and billed amount per utility per month (dashboard and reports).</td></tr>
+  <tr><td>6 indexes</td><td>B-tree</td><td>(meter_id, reading_date), (status, due_date), billing_month, area, complaint status, (user_id, is_read).</td></tr>
+  <caption>Database objects that enforce business rules</caption>
+</table>
+<p>Example &ndash; the overpayment trigger (from <code>schema.sql</code>):</p>
+<pre>CREATE TRIGGER trg_no_overpay
+BEFORE INSERT ON payments
+WHEN NEW.amount &gt; (SELECT ROUND(total_amount - amount_paid, 2) FROM bills WHERE bill_id = NEW.bill_id) + 0.001
+BEGIN
+    SELECT RAISE(ABORT, 'Payment exceeds outstanding balance');
+END;</pre>
+<h3>Billing formula</h3>
+<p>For each slab <i>i</i> with range [from<sub>i</sub>, to<sub>i</sub>) and rate r<sub>i</sub> (the last slab has no upper limit):</p>
+<p class="formula">units in slab<sub>i</sub> = max(0, min(U, to<sub>i</sub>) &minus; from<sub>i</sub>) &nbsp;&nbsp;&nbsp;
+Energy = &Sigma; units in slab<sub>i</sub> &times; r<sub>i</sub> &nbsp;&nbsp;&nbsp;
+Total = (Energy + Fixed) &times; (1 + Tax% / 100)</p>
+<p><b>Worked example</b> (domestic electricity, 250 kWh): 100 &times; 3.50 = 350.00; 150 &times; 5.00 = 750.00; energy = 1,100.00;
++ fixed 50.00 = 1,150.00; + 5% tax 57.50 = <b>&#8377;1,207.50</b> (verified by test UT-01).</p>

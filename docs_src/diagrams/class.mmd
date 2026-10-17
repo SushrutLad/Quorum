@@ -1,0 +1,66 @@
+classDiagram
+  class User {
+    +user_id
+    +username
+    +role
+    +login()
+    +logout()
+  }
+  class Customer {
+    +customer_code
+    +area
+    +category
+    +viewBills()
+    +payBill()
+    +raiseComplaint()
+  }
+  class Employee {
+    +emp_code
+    +designation
+    +recordReading()
+    +resolveComplaint()
+  }
+  class Connection {
+    +connection_no
+    +status
+  }
+  class Meter {
+    +meter_no
+    +initial_reading
+    +lastReading()
+  }
+  class MeterReading {
+    +reading_date
+    +reading_value
+    +consumption
+  }
+  class TariffPlan {
+    +fixed_charge
+    +tax_percent
+    +slabs
+  }
+  class Bill {
+    +bill_no
+    +total_amount
+    +status
+    +outstanding()
+  }
+  class Payment {
+    +receipt_no
+    +amount
+    +method
+  }
+  class BillingService {
+    +calculate_bill(units, slabs, fixed, tax)
+    +generate_bill(db, reading_id)
+  }
+  User <|-- Customer
+  User <|-- Employee
+  Customer "1" --> "*" Connection
+  Connection "1" --> "1..*" Meter
+  Connection "*" --> "1" TariffPlan
+  Meter "1" --> "*" MeterReading
+  MeterReading "1" --> "0..1" Bill
+  Bill "1" --> "*" Payment
+  BillingService ..> TariffPlan : uses
+  BillingService ..> Bill : creates

@@ -1,0 +1,17 @@
+gantt
+  title EUMS project plan (Waterfall)
+  dateFormat YYYY-MM-DD
+  axisFormat %d %b
+  todayMarker off
+  section Phase 1-3 (done)
+  Feasibility study          :done, f, 2026-08-03, 7d
+  Requirements / SRS         :done, r, after f, 10d
+  System & DB design         :done, d, after r, 10d
+  section Phase 4 Implementation
+  Core modules (auth, customers, readings, billing, payments) :done, i1, after d, 14d
+  Service modules (complaints, outages, tariffs, reports)     :done, i2, after i1, 7d
+  Remaining features + MySQL version                          :active, i3, 2026-10-05, 21d
+  section Phase 5-7
+  Unit & functional testing  :active, t1, 2026-09-28, 35d
+  System & acceptance testing:t2, 2026-10-26, 10d
+  Deployment & final report  :dep, after t2, 7d

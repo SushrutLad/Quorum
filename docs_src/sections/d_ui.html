@@ -1,0 +1,20 @@
+{% if not is_report %}<h2>User Interface Screens</h2>
+<p>The prototype is the working application itself. Each feature has its own page. Admin and employee pages share the
+staff portal (employees do not see Employees, Tariffs and Reports); customers have a separate portal.</p>{% endif %}
+{% for name, caption in [
+  ('01_login', 'Login page with demo accounts'),
+  ('02_admin_dashboard', 'Admin dashboard: KPIs, billed amount per utility, collections, recent activity'),
+  ('03_customers', 'Customers list with search'), ('04_customer_new', 'Add customer form'),
+  ('05_connections', 'Connections, filterable by utility'), ('06_readings', 'Meter readings list'),
+  ('07_reading_form', 'Add meter reading (employee)'), ('08_bills', 'Billing list with status tabs'),
+  ('09_bill_generated', 'Bill details with slab breakdown and counter payment'), ('10_payments', 'Payments with totals by method'),
+  ('11_complaints', 'Complaint management'), ('12_outages', 'Outage management'), ('13_tariffs', 'Tariff editor (admin)'),
+  ('14_employees', 'Employees (admin)'), ('15_reports', 'Consumption analytics and overdue bills (admin)'),
+  ('16_customer_dashboard', 'Customer dashboard'), ('25_my_connections', 'Customer: my connections'),
+  ('17_customer_bills', 'Customer: bills and payments'), ('18_pay', 'Customer: pay bill'),
+  ('19_paid', 'Customer: bill after successful payment'), ('20_usage', 'Customer: usage history per utility'),
+  ('21_my_complaints', 'Customer: raise and track complaints'), ('22_my_outages', 'Customer: outages in my area'),
+  ('23_notifications', 'Customer: notifications'), ('24_profile', 'Customer: profile and password'),
+] %}
+<figure><img src="{{ shot(name) }}" style="width:{{ '70%' if name in ('09_bill_generated', '19_paid') else '96%' }}"><figcaption>{{ caption }}</figcaption></figure>
+{% endfor %}
