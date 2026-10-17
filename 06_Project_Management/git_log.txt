@@ -1,0 +1,2 @@
+e515b62 2026-10-17 Claude  Add EUMS mid-semester submission: Flask + SQLite app, tests, report and SEPM documents
+3abf698 2026-10-17 SushrutLad  Initial commit
