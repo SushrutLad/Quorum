@@ -1,9 +1,0 @@
-2579b90 2026-10-21 Sushrut Lad  Switch to a plain dark UI and use team member names in demo and test data
-802ac37 2026-10-21 Sushrut Lad  Refresh git log
-86a830f 2026-10-21 Sushrut Lad  Update git log
-306e07d 2026-10-21 Sushrut Lad  Shorten and reword report, add submission README
-1ed273a 2026-10-21 Sushrut Lad  Add team member names and registration numbers to all documents
-d2652ec 2026-10-17 Sushrut Lad  Update git log evidence
-a86be90 2026-10-17 Sushrut Lad  Add git log for contribution evidence
-d9ccc4e 2026-10-17 Sushrut Lad  Add EUMS mid-semester submission: Flask + SQLite app, tests, report and SEPM documents
-3abf698 2026-10-17 SushrutLad  Initial commit
