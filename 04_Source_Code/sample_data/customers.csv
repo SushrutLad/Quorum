@@ -1,8 +1,8 @@
 full_name,email,phone,area,category,address,utilities
-Rahul Verma,rahul@example.com,9876500001,Gomti Nagar,residential,"12, Vibhuti Khand, Gomti Nagar",E;W;G
-Priya Singh,priya@example.com,9876500002,Aliganj,residential,"45, Sector B, Aliganj",E;W;G
-Amit Kumar,amit@example.com,9876500003,Indira Nagar,residential,"7, Sector 14, Indira Nagar",E;G
-Neha Gupta,neha@example.com,9876500004,Hazratganj,residential,"21, Lalbagh Road, Hazratganj",E;W
+Sushrut Lad,sushrut@example.com,9876500001,Gomti Nagar,residential,"12, Vibhuti Khand, Gomti Nagar",E;W;G
+Sumit P Surendran,sumit@example.com,9876500002,Aliganj,residential,"45, Sector B, Aliganj",E;W;G
+Sreethan Reddy,sreethan@example.com,9876500003,Indira Nagar,residential,"7, Sector 14, Indira Nagar",E;G
+Viswajith,viswajith@example.com,9876500004,Hazratganj,residential,"21, Lalbagh Road, Hazratganj",E;W
 Sharma Sweets,sharmasweets@example.com,9876500005,Hazratganj,commercial,"3, Main Market, Hazratganj",E;W;G
 Rohit Sharma,rohit@example.com,9876500006,Gomti Nagar,residential,"88, Vishal Khand, Gomti Nagar",E;W
 Ananya Mishra,ananya@example.com,9876500007,Aliganj,residential,"16, Sector H, Aliganj",E;W;G

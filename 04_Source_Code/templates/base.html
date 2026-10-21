@@ -1,71 +1,63 @@
-{% from "_macros.html" import icon %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}EUMS{% endblock %} - UtiliPro</title>
+  <title>{% block title %}EUMS{% endblock %} - EUMS</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 <div class="layout">
   <aside class="sidebar">
-    <div class="brand">{{ icon('bolt', 28) }}<div><b>UtiliPro</b><span>Utility Management System</span></div></div>
+    <div class="brand"><b>EUMS</b><span>Energy &amp; Utility Management</span></div>
     <nav class="nav">
       {% if session.role == 'customer' %}
         {% set links = [
-          ('customer.dashboard', 'home', 'Dashboard'),
-          ('customer.connections', 'plug', 'My Connections'),
-          ('customer.bills', 'file', 'Bills & Payments'),
-          ('customer.usage', 'chart-line', 'Usage History'),
-          ('customer.complaints', 'clipboard', 'Complaints'),
-          ('customer.outages', 'alert', 'Outages'),
-          ('customer.profile', 'user', 'Profile'),
-          ('customer.notifications', 'bell', 'Notifications'),
+          ('customer.dashboard', 'Dashboard'),
+          ('customer.connections', 'My Connections'),
+          ('customer.bills', 'Bills & Payments'),
+          ('customer.usage', 'Usage History'),
+          ('customer.complaints', 'Complaints'),
+          ('customer.outages', 'Outages'),
+          ('customer.profile', 'Profile'),
+          ('customer.notifications', 'Notifications'),
         ] %}
       {% else %}
         {% set links = [
-          ('staff.dashboard', 'home', 'Dashboard'),
-          ('staff.customers', 'users', 'Customers'),
-          ('staff.connections', 'plug', 'Connections'),
-          ('staff.readings', 'gauge', 'Meter Readings'),
-          ('staff.bills', 'file', 'Billing'),
-          ('staff.payments', 'card', 'Payments'),
-          ('staff.complaints', 'clipboard', 'Complaints'),
-          ('staff.outages', 'alert', 'Outages'),
+          ('staff.dashboard', 'Dashboard'),
+          ('staff.customers', 'Customers'),
+          ('staff.connections', 'Connections'),
+          ('staff.readings', 'Meter Readings'),
+          ('staff.bills', 'Billing'),
+          ('staff.payments', 'Payments'),
+          ('staff.complaints', 'Complaints'),
+          ('staff.outages', 'Outages'),
         ] %}
         {% if session.role == 'admin' %}
           {% set links = links + [
-            ('staff.employees', 'id', 'Employees'),
-            ('staff.tariffs', 'tag', 'Tariffs'),
-            ('staff.reports', 'chart', 'Reports'),
+            ('staff.employees', 'Employees'),
+            ('staff.tariffs', 'Tariffs'),
+            ('staff.reports', 'Reports'),
           ] %}
         {% endif %}
       {% endif %}
-      {% for endpoint, ico, text in links %}
+      {% for endpoint, text in links %}
         <a href="{{ url_for(endpoint) }}" class="{{ 'active' if (request.endpoint or '').startswith(endpoint.rstrip('s')) }}">
-          {{ icon(ico) }} {{ text }}
-          {% if endpoint == 'customer.notifications' and unread %}<span class="count">{{ unread }}</span>{% endif %}
+          {{ text }}{% if endpoint == 'customer.notifications' and unread %} ({{ unread }}){% endif %}
         </a>
       {% endfor %}
-      <a href="{{ url_for('logout') }}">{{ icon('logout') }} Log out</a>
+      <a href="{{ url_for('logout') }}">Log out</a>
     </nav>
   </aside>
 
   <div class="main">
     <header class="topbar">
-      <form class="search" action="{{ url_for('customer.bills') if session.role == 'customer' else url_for('staff.customers') }}">
-        {% if session.role != 'customer' %}
-        <input name="q" placeholder="Search customers by name, code, area or phone..." aria-label="Search customers">
-        {% endif %}
+      {% if session.role != 'customer' %}
+      <form class="search" action="{{ url_for('staff.customers') }}">
+        <input name="q" placeholder="Search customers..." aria-label="Search customers">
       </form>
-      <div class="user">
-        {% if session.role == 'customer' %}
-          <a href="{{ url_for('customer.notifications') }}" title="Notifications" style="color:var(--muted)">{{ icon('bell', 20) }}</a>
-        {% endif %}
-        <div class="avatar">{{ session.name[0] }}</div>
-        <div><b>{{ session.name }}</b><span>{{ {'admin': 'Administrator', 'employee': 'Employee', 'customer': 'Customer'}[session.role] }}</span></div>
-      </div>
+      {% else %}<span></span>{% endif %}
+      <div class="user">Logged in as <b>{{ session.name }}</b> ({{ session.role }})</div>
     </header>
 
     <main class="content">

@@ -1,16 +1,16 @@
-{% from "_macros.html" import icon %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login - UtiliPro</title>
+  <title>Login - EUMS</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 <div class="login-page">
   <form class="login-box" method="post">
-    <div class="brand">{{ icon('bolt', 30) }}<div><b>UtiliPro</b><span class="muted">Energy &amp; Utility Management System</span></div></div>
+    <h1>EUMS Login</h1>
+    <p class="muted">Energy &amp; Utility Management System</p>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
     {% endwith %}
@@ -23,7 +23,7 @@
       Demo logins:<br>
       Admin <code>admin</code> / <code>admin123</code><br>
       Employee <code>reader</code> / <code>reader123</code><br>
-      Customer <code>rahul@example.com</code> / <code>pass123</code>
+      Customer <code>sushrut@example.com</code> / <code>pass123</code>
     </div>
   </form>
 </div>

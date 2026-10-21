@@ -6,8 +6,8 @@ from conftest import login
 TOMORROW = (date.today() + timedelta(days=1)).isoformat()
 
 
-def rahul_meter(db, utility_id=1):
-    """Rahul Verma (customer 1) - meter, last reading value for a utility."""
+def sushrut_meter(db, utility_id=1):
+    """Sushrut Lad (customer C1001): the meter and its last reading for one utility."""
     return db.execute("""SELECT m.meter_id, MAX(mr.reading_value) AS last FROM meters m
                            JOIN connections c ON c.connection_id = m.connection_id
                            JOIN meter_readings mr ON mr.meter_id = m.meter_id
@@ -32,7 +32,7 @@ def test_it03_not_logged_in_redirects_to_login(client):
 
 
 def test_it04_role_checks(client):
-    login(client, "rahul@example.com", "pass123")
+    login(client, "sushrut@example.com", "pass123")
     assert client.get("/staff/dashboard").status_code == 403
     login(client, "reader", "reader123")
     assert client.get("/staff/tariffs").status_code == 403       # admin only
@@ -40,16 +40,17 @@ def test_it04_role_checks(client):
 
 
 def test_it05_customer_cannot_see_other_customers_bill(client, db):
+    # a bill that belongs to Sumit P Surendran (customer C1002)
     other = db.execute("""SELECT b.bill_id FROM bills b JOIN connections c ON c.connection_id = b.connection_id
                            WHERE c.customer_id = 2 LIMIT 1""").fetchone()[0]
-    login(client, "rahul@example.com", "pass123")
+    login(client, "sushrut@example.com", "pass123")
     assert client.get(f"/my/bills/{other}").status_code == 403
     assert client.get(f"/my/bills/{other}/pay").status_code == 403
 
 
 # ---------------------------------------------------------------- end-to-end: reading -> bill -> payment
 def test_it06_reading_to_bill_to_payment(client, db):
-    meter = rahul_meter(db)
+    meter = sushrut_meter(db)
     login(client, "reader", "reader123")
     r = client.post("/staff/readings/new", data={"meter_id": meter["meter_id"], "reading_value": meter["last"] + 250,
                                                  "reading_date": TOMORROW})
@@ -58,7 +59,7 @@ def test_it06_reading_to_bill_to_payment(client, db):
     bill = db.execute("SELECT * FROM bills ORDER BY bill_id DESC LIMIT 1").fetchone()
     assert bill["units"] == 250 and bill["total_amount"] == 1207.50 and bill["status"] == "unpaid"
 
-    login(client, "rahul@example.com", "pass123")
+    login(client, "sushrut@example.com", "pass123")
     assert bill["bill_no"].encode() in client.get("/my/bills").data
     r = client.post(f"/my/bills/{bill['bill_id']}/pay", data={"method": "upi", "amount": "1207.50"})
     assert r.status_code == 302
@@ -71,7 +72,7 @@ def test_it06_reading_to_bill_to_payment(client, db):
 
 
 def test_it07_lower_reading_rejected(client, db):
-    meter = rahul_meter(db)
+    meter = sushrut_meter(db)
     before = db.execute("SELECT COUNT(*) FROM bills").fetchone()[0]
     login(client, "reader", "reader123")
     r = client.post("/staff/readings/new", data={"meter_id": meter["meter_id"], "reading_value": meter["last"] - 10,
@@ -81,7 +82,7 @@ def test_it07_lower_reading_rejected(client, db):
 
 
 def test_it08_reading_date_must_move_forward(client, db):
-    meter = rahul_meter(db)
+    meter = sushrut_meter(db)
     login(client, "reader", "reader123")
     r = client.post("/staff/readings/new", data={"meter_id": meter["meter_id"], "reading_value": meter["last"] + 10,
                                                  "reading_date": "2020-01-01"})
@@ -92,7 +93,7 @@ def test_it09_overpayment_rejected(client, db):
     bill = db.execute("""SELECT b.bill_id, b.total_amount - b.amount_paid AS due FROM bills b
                            JOIN connections c ON c.connection_id = b.connection_id
                           WHERE c.customer_id = 1 AND b.status <> 'paid' LIMIT 1""").fetchone()
-    login(client, "rahul@example.com", "pass123")
+    login(client, "sushrut@example.com", "pass123")
     r = client.post(f"/my/bills/{bill['bill_id']}/pay", data={"method": "card", "amount": bill["due"] + 100})
     assert b"Payment exceeds outstanding balance" in r.data
     assert db.execute("SELECT status FROM bills WHERE bill_id = ?", (bill["bill_id"],)).fetchone()[0] != "paid"
@@ -121,7 +122,7 @@ def test_it11_outage_notifies_only_that_area(client, db):
 
 
 def test_it12_complaint_lifecycle(client, db):
-    login(client, "rahul@example.com", "pass123")
+    login(client, "sushrut@example.com", "pass123")
     client.post("/my/complaints", data={"connection_id": 1, "issue": "Meter sparking", "priority": "high"})
     complaint = db.execute("SELECT * FROM complaints ORDER BY complaint_id DESC LIMIT 1").fetchone()
     assert complaint["issue"] == "Meter sparking" and complaint["status"] == "open"
@@ -138,7 +139,7 @@ def test_it12_complaint_lifecycle(client, db):
 def test_it13_duplicate_customer_email_rejected(client, db):
     login(client, "admin", "admin123")
     before = db.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
-    r = client.post("/staff/customers/new", data={"full_name": "Copy", "email": "rahul@example.com", "phone": "9999999999",
+    r = client.post("/staff/customers/new", data={"full_name": "Sushrut Lad", "email": "sushrut@example.com", "phone": "9999999999",
                                                   "address": "x", "area": "Aliganj", "category": "residential",
                                                   "password": "secret1"})
     assert b"already exists" in r.data

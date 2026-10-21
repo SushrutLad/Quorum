@@ -202,7 +202,7 @@ def seed(path):
     db.execute("DELETE FROM audit_log")
     db.executemany("INSERT INTO audit_log (action, details, created_at) VALUES (?, ?, ?)", [
         ("New customer registered", "Green Leaf Cafe", (datetime.now() - timedelta(hours=6)).strftime(fmt)),
-        ("Bill payment received", "Rs 1,240.00 - Rahul Verma", (datetime.now() - timedelta(hours=4)).strftime(fmt)),
+        ("Bill payment received", "Rs 1,240.00 - Sushrut Lad", (datetime.now() - timedelta(hours=4)).strftime(fmt)),
         ("New complaint submitted", "Low water pressure - #CMP4501", (datetime.now() - timedelta(hours=3)).strftime(fmt)),
         ("Meter reading updated", "Meter MTR-E-1001", (datetime.now() - timedelta(hours=2)).strftime(fmt)),
         ("Outage reported", "Area: Gomti Nagar", (datetime.now() - timedelta(hours=1)).strftime(fmt)),
@@ -215,4 +215,4 @@ if __name__ == "__main__":
     target = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "eums.db")
     seed(target)
     print(f"Database created at {target}")
-    print("Logins: admin/admin123, reader/reader123, rahul@example.com/pass123")
+    print("Logins: admin/admin123, reader/reader123, sushrut@example.com/pass123")

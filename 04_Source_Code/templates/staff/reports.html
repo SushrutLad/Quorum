@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% from "_macros.html" import utility_icon %}
 {% block title %}Reports{% endblock %}
 {% block content %}
 <div class="page-head"><div><h1>Consumption Analytics</h1>
@@ -8,8 +7,7 @@
 
 <div class="grid g3">
   {% for t in totals %}
-  <div class="card utility-card"><div class="head"><span class="icon {{ t.utility|lower }}">{{ utility_icon(t.utility) }}</span>
-    <div><div class="muted small">{{ t.utility }} usage</div><div class="amount">{{ '{:,.1f}'.format(t.units) }} {{ t.unit }}</div>
+  <div class="card utility-card"><div class="head"><div><div class="muted small">{{ t.utility }} usage</div><div class="amount">{{ '{:,.1f}'.format(t.units) }} {{ t.unit }}</div>
     <div class="small muted">Billed {{ t.billed|money }}</div></div></div></div>
   {% endfor %}
 </div>

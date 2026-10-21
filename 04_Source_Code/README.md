@@ -30,16 +30,16 @@ On Windows, use `py` instead of `python` if `python` is not found.
 | Employee – meter reader | `reader` | `reader123` |
 | Employee – billing officer | `billing` | `billing123` |
 | Employee – technician | `tech` | `tech123` |
-| Customer | `rahul@example.com` (or any email in `sample_data/customers.csv`) | `pass123` |
+| Customer | `sushrut@example.com` (or any email in `sample_data/customers.csv`) | `pass123` |
 
 These are sample accounts with fictional data only.
 
 ## Try the end-to-end feature
 
 1. Log in as `reader` and go to **Meter Readings → Add Reading**.
-2. Pick meter `MTR-E-1001 - Rahul Verma`. The previous reading appears automatically.
+2. Pick meter `MTR-E-1001 - Sushrut Lad`. The previous reading appears automatically.
 3. Type a higher reading (a lower one is blocked), pick tomorrow's date and click **Save Reading**. The bill is generated.
-4. Log out, log in as `rahul@example.com`, open **Bills & Payments**, click **Pay** and pay by UPI.
+4. Log out, log in as `sushrut@example.com`, open **Bills & Payments**, click **Pay** and pay by UPI.
 5. The bill becomes **Paid** and a notification appears.
 
 ## Configuration

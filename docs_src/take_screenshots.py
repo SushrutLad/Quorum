@@ -46,7 +46,7 @@ with sync_playwright() as p:
     # Meter reading entry by an employee, including the live validation message
     login(page, "reader", "reader123")
     page.goto(BASE + "/staff/readings/new")
-    page.select_option("#meter_id", label="MTR-E-1001 - Rahul Verma")
+    page.select_option("#meter_id", label="MTR-E-1001 - Sushrut Lad")
     page.wait_for_timeout(500)
     prev = float(page.input_value("#previous"))
     page.fill("#reading_value", f"{prev - 5:.1f}")
@@ -58,7 +58,7 @@ with sync_playwright() as p:
     shot(page, "09_bill_generated", full=True)
     bill_url = page.url.replace(BASE, "").replace("/staff/", "/my/")
 
-    login(page, "rahul@example.com", "pass123")
+    login(page, "sushrut@example.com", "pass123")
     shot(page, "16_customer_dashboard", "/my/dashboard")
     shot(page, "17_customer_bills", "/my/bills")
     shot(page, "18_pay", bill_url + "/pay")

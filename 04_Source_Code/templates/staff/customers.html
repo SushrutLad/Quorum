@@ -1,10 +1,9 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon %}
 {% block title %}Customers{% endblock %}
 {% block content %}
 <div class="page-head">
   <div><h1>Customers</h1><div class="muted">{{ customers|length }} customer{{ 's' if customers|length != 1 }}{% if q %} matching "{{ q }}"{% endif %}</div></div>
-  <a class="btn" href="{{ url_for('staff.customer_new') }}">{{ icon('plus', 16) }} New Customer</a>
+  <a class="btn" href="{{ url_for('staff.customer_new') }}">New Customer</a>
 </div>
 <div class="card">
   <form class="inline-form" style="margin-bottom:14px">

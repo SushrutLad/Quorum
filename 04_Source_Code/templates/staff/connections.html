@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, badge %}
+{% from "_macros.html" import badge %}
 {% block title %}Connections{% endblock %}
 {% block content %}
 <div class="page-head">
   <div><h1>Connections</h1><div class="muted">{{ connections|length }} connections</div></div>
-  <a class="btn" href="{{ url_for('staff.connection_new') }}">{{ icon('plus', 16) }} New Connection</a>
+  <a class="btn" href="{{ url_for('staff.connection_new') }}">New Connection</a>
 </div>
 <div class="card">
   <div class="tabs">

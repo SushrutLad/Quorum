@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% from "_macros.html" import utility_icon, badge %}
+{% from "_macros.html" import badge %}
 {% block title %}My Connections{% endblock %}
 {% block content %}
 <div class="page-head"><div><h1>My Connections</h1><div class="muted">Your electricity, water and gas connections</div></div></div>
 <div class="grid g3">
 {% for c in connections %}
   <div class="card utility-card">
-    <div class="head"><span class="icon {{ c.utility|lower }}">{{ utility_icon(c.utility, 22) }}</span><div><b>{{ c.utility }}</b><div class="small muted">#{{ c.connection_no }}</div></div></div>
+    <div class="head"><div><b>{{ c.utility }}</b><div class="small muted">#{{ c.connection_no }}</div></div></div>
     <dl class="kv" style="margin-top:14px;grid-template-columns:120px 1fr">
       <dt>Status</dt><dd>{{ c.status|label }}</dd>
       <dt>Meter</dt><dd>{{ c.meter_no or '-' }}</dd>

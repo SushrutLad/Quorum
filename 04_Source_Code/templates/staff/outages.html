@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, badge %}
+{% from "_macros.html" import badge %}
 {% block title %}Outages{% endblock %}
 {% block content %}
 <div class="page-head"><div><h1>Outages</h1><div class="muted">Customers in the affected area are notified automatically</div></div>
-  <a class="btn" href="{{ url_for('staff.outage_new') }}">{{ icon('plus', 16) }} Report Outage</a></div>
+  <a class="btn" href="{{ url_for('staff.outage_new') }}">Report Outage</a></div>
 <div class="card">
   <div class="tabs">
     {% for s in ['active', 'scheduled', 'resolved'] %}

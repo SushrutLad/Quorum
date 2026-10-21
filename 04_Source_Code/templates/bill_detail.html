@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, badge %}
+{% from "_macros.html" import badge %}
 {% block title %}Bill {{ bill.bill_no }}{% endblock %}
 {% block content %}
 <div class="page-head">
@@ -9,9 +9,9 @@
   </div>
   <div class="no-print" style="display:flex;gap:8px">
     {% if session.role == 'customer' and bill.status != 'paid' %}
-      <a class="btn" href="{{ url_for('customer.pay', bill_id=bill.bill_id) }}">{{ icon('lock', 16) }} Pay {{ bill.outstanding|money }}</a>
+      <a class="btn" href="{{ url_for('customer.pay', bill_id=bill.bill_id) }}">Pay {{ bill.outstanding|money }}</a>
     {% endif %}
-    <button class="btn light" onclick="window.print()">{{ icon('download', 16) }} Print / Save PDF</button>
+    <button class="btn light" onclick="window.print()">Print / Save PDF</button>
   </div>
 </div>
 

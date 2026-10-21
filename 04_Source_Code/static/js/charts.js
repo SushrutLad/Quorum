@@ -3,8 +3,10 @@ const UTILITY_COLORS = { Electricity: "#2a78d6", Water: "#1baf7a", Gas: "#eb6834
 const CATEGORY_COLORS = ["#2a78d6", "#eb6834", "#1baf7a"];
 
 if (window.Chart) {
-  Chart.defaults.font.family = '"Segoe UI", system-ui, Roboto, Arial, sans-serif';
-  Chart.defaults.color = "#64748b";
+  Chart.defaults.font.family = "Arial, Helvetica, sans-serif";
+  Chart.defaults.color = "#bbbbbb";
+  Chart.defaults.borderColor = "#3a3a3a";
+  Chart.defaults.animation = false;
   Chart.defaults.maintainAspectRatio = false;
   Chart.defaults.plugins.legend.labels.usePointStyle = true;
   Chart.defaults.plugins.legend.labels.boxHeight = 8;
@@ -32,7 +34,7 @@ function lineChart(canvasId, months, series, money = true) {
       interaction: { mode: "index", intersect: false },
       plugins: { legend: { position: "top", align: "start" },
                  tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${money ? rupees(c.raw) : c.raw}` } } },
-      scales: { y: { beginAtZero: true, grid: { color: "#eef1f5" }, ticks: { callback: (v) => (money ? rupees(v) : v) } },
+      scales: { y: { beginAtZero: true, grid: { color: "#3a3a3a" }, ticks: { callback: (v) => (money ? rupees(v) : v) } },
                 x: { grid: { display: false } } },
     },
   });
@@ -45,7 +47,7 @@ function barChart(canvasId, labels, values, color, unit = "", horizontal = false
     options: {
       indexAxis: horizontal ? "y" : "x",
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => `${c.raw} ${unit}` } } },
-      scales: { x: { grid: { display: horizontal }, beginAtZero: true }, y: { grid: { color: "#eef1f5" }, beginAtZero: true } },
+      scales: { x: { grid: { display: horizontal }, beginAtZero: true }, y: { grid: { color: "#3a3a3a" }, beginAtZero: true } },
     },
   });
 }
@@ -63,7 +65,7 @@ function groupedBars(canvasId, months, series) {
     options: {
       plugins: { legend: { position: "top", align: "start" },
                  tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${rupees(c.raw)}` } } },
-      scales: { y: { beginAtZero: true, grid: { color: "#eef1f5" }, ticks: { callback: rupees } }, x: { grid: { display: false } } },
+      scales: { y: { beginAtZero: true, grid: { color: "#3a3a3a" }, ticks: { callback: rupees } }, x: { grid: { display: false } } },
     },
   });
 }
@@ -71,7 +73,7 @@ function groupedBars(canvasId, months, series) {
 function doughnut(canvasId, labels, values, colors) {
   new Chart(document.getElementById(canvasId), {
     type: "doughnut",
-    data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: "#fff", borderWidth: 2 }] },
+    data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: "#2a2a2a", borderWidth: 2 }] },
     options: {
       cutout: "62%",
       plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: (c) => `${c.label}: ${rupees(c.raw)}` } } },

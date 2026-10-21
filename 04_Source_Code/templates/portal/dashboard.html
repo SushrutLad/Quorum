@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import utility_icon, badge %}
+{% from "_macros.html" import badge %}
 {% block title %}My Dashboard{% endblock %}
 {% block content %}
 <div class="page-head"><div><h1>Welcome back, {{ c.full_name.split()[0] }}!</h1><div class="muted">Here's your utility usage and account overview</div></div>
@@ -8,8 +8,7 @@
 <div class="grid g3">
   {% for card in cards %}
   <div class="card utility-card">
-    <div class="head"><span class="icon {{ card.utility|lower }}">{{ utility_icon(card.utility, 22) }}</span>
-      <div><b>{{ card.utility }}</b><div class="small muted">Connection #{{ card.connection_no }}</div>
+    <div class="head"><div><b>{{ card.utility }}</b><div class="small muted">Connection #{{ card.connection_no }}</div>
         <div style="margin-top:4px">{{ badge('active-conn', 'Active') if card.status == 'active' else badge(card.status) }}</div></div></div>
     {% if card.bill %}
       <div class="small muted" style="margin-top:14px">Current bill ({{ card.bill.billing_month|month_name }})</div>

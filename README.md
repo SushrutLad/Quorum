@@ -28,7 +28,7 @@ Open **http://127.0.0.1:5000** and log in with one of these:
 |---|---|---|
 | Admin | `admin` | `admin123` |
 | Employee (meter reader) | `reader` | `reader123` |
-| Customer | `rahul@example.com` | `pass123` |
+| Customer | `sushrut@example.com` | `pass123` |
 
 `seed.py` builds a fresh database with six months of sample data. Run it again any time you want to reset everything.
 
@@ -72,14 +72,14 @@ To run the tests: `python -m pytest -v` (inside `04_Source_Code`). You should se
 This is the part the evaluators most want to see working.
 
 1. Log in as **reader / reader123**.
-2. Go to **Meter Readings → Add Reading** and pick `MTR-E-1001 - Rahul Verma`. The last reading fills in by itself.
+2. Go to **Meter Readings → Add Reading** and pick `MTR-E-1001 - Sushrut Lad`. The last reading fills in by itself.
 3. Type a number *lower* than the last reading. You'll see the error and the Save button turns off. This shows the
    validation.
 4. Now type a higher number, set the date to tomorrow, and click **Save Reading**. The bill is generated straight away,
    with the slab breakdown.
-5. Log out and log in as **rahul@example.com / pass123**. The new bill is on the dashboard.
+5. Log out and log in as **sushrut@example.com / pass123**. The new bill is on the dashboard.
 6. Open **Bills & Payments → Pay**, choose UPI and pay. The bill turns **Paid** and a notification appears.
-7. Optional: log in as **admin**, go to **Outages → Report Outage** for Gomti Nagar, then log back in as Rahul to see
+7. Optional: log in as **admin**, go to **Outages → Report Outage** for Gomti Nagar, then log back in as Sushrut to see
    the alert.
 
 A suggested 5–7 minute script is in `07_Demo/DEMO_VIDEO_LINK.txt`.

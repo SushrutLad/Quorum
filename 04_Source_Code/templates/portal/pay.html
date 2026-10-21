@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, badge %}
+{% from "_macros.html" import badge %}
 {% block title %}Pay Bill{% endblock %}
 {% block content %}
 <div class="page-head"><div><h1>Pay Bill</h1><div class="crumbs"><a href="{{ url_for('customer.bills') }}">Bills &amp; Payments</a> / Pay Bill</div></div></div>
@@ -22,7 +22,7 @@
     {% for key, text in methods.items() %}
       <label class="pay-option"><input type="radio" name="method" value="{{ key }}" {{ 'checked' if loop.first }}> {{ text }}</label>
     {% endfor %}
-    <button class="btn block" style="margin-top:8px">{{ icon('lock', 16) }} Pay <span id="payAmount">{{ bill.outstanding|money }}</span></button>
+    <button class="btn block" style="margin-top:8px">Pay <span id="payAmount">{{ bill.outstanding|money }}</span></button>
     <p class="hint">Demo build: the payment gateway is simulated and every payment succeeds.</p>
   </div>
 </form>
