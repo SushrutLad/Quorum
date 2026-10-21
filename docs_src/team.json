@@ -8,9 +8,25 @@
   "submission_date": "October 2026",
   "demo_video_link": "PASTE-VIEW-ONLY-LINK-HERE",
   "members": [
-    {"name": "Sushrut Lad", "reg_no": "__________", "role": "Team lead, backend (billing, readings), database triggers"},
-    {"name": "Member 2", "reg_no": "__________", "role": "Database design, ER model, seed data, reports module"},
-    {"name": "Member 3", "reg_no": "__________", "role": "Frontend pages, customer portal, UI design"},
-    {"name": "Member 4", "reg_no": "__________", "role": "Requirements/SRS, testing, documentation"}
+    {
+      "name": "Sumit P Surendran",
+      "reg_no": "20243590",
+      "role": "Database design, ER model, seed data, reports module"
+    },
+    {
+      "name": "Sreethan Reddy",
+      "reg_no": "20243550",
+      "role": "Frontend pages, customer portal, UI design"
+    },
+    {
+      "name": "Sushrut Lad",
+      "reg_no": "20243551",
+      "role": "Team lead, backend (billing, readings), database triggers"
+    },
+    {
+      "name": "Viswajith",
+      "reg_no": "20243559",
+      "role": "Requirements/SRS, testing, documentation"
+    }
   ]
 }
