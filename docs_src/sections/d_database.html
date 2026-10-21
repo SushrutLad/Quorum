@@ -23,10 +23,10 @@
 </table>
 <h3>Normalisation</h3>
 <ul>
-  <li><b>1NF:</b> every column holds one atomic value; repeating data (many readings, many payments, many slabs) is in its own table, not in repeated columns.</li>
-  <li><b>2NF:</b> every table has a single-column surrogate primary key, so there are no partial dependencies. For natural composite keys such as (meter_id, reading_date), the non-key columns depend on the whole key.</li>
-  <li><b>3NF / BCNF:</b> there are no transitive dependencies. For example, tariff rates are not stored in <code>connections</code>; a connection points to a tariff plan and the plan points to its slabs. Utility units live only in <code>utilities</code>.</li>
-  <li><b>Deliberate denormalisation:</b> <code>bills</code> stores units, energy charge, fixed charge, tax and total at the time the bill is issued. Tariffs change over time, but an issued bill is a legal record and must never change. <code>meter_readings.consumption</code> is also stored so that a reading row is self-explanatory and cannot drift.</li>
+  <li><b>1NF:</b> each column holds a single value. Things that repeat, like readings, payments and slabs, get their own table instead of extra columns.</li>
+  <li><b>2NF:</b> every table has a single-column primary key, so there are no partial dependencies. Where there is a natural composite key, such as (meter_id, reading_date), the other columns depend on all of it.</li>
+  <li><b>3NF / BCNF:</b> no non-key column depends on another non-key column. For example, rates aren't stored on <code>connections</code>; a connection points to a tariff plan, and the plan has its slabs. Units like kWh live only in <code>utilities</code>.</li>
+  <li><b>Where we broke 3NF on purpose:</b> <code>bills</code> keeps a copy of the units, charges, tax and total from the day it was made. Tariffs change, but a bill that has already gone out shouldn't. We also store <code>consumption</code> on each reading so a row makes sense on its own.</li>
 </ul>
 <h3>Triggers, views and indexes</h3>
 <table>

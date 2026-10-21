@@ -1,3 +1,5 @@
+cdaaaf1 2026-10-21 Claude  Add team member names and registration numbers to all documents
+46a878f 2026-10-17 Claude  Update git log evidence
 3117734 2026-10-17 Claude  Add git log for contribution evidence
 e515b62 2026-10-17 Claude  Add EUMS mid-semester submission: Flask + SQLite app, tests, report and SEPM documents
 3abf698 2026-10-17 SushrutLad  Initial commit

@@ -1,36 +1,35 @@
 {% set FR = [
-  ('FR-01', 'Authentication', 'Users log in with username/email and password; passwords are stored as salted hashes; users can log out.', 'must', 'done'),
-  ('FR-02', 'Authorisation', 'Each page is restricted to its roles (Admin, Employee, Customer). Unauthorised access returns HTTP 403; not logged in redirects to login.', 'must', 'done'),
-  ('FR-03', 'Customers', 'Staff register a customer (name, email, 10-digit phone, address, area, category, initial password). Email must be unique. A customer code (C1001...) is generated.', 'must', 'done'),
-  ('FR-04', 'Customers', 'Staff search customers by name, code, area or phone and open a customer profile showing connections and recent bills.', 'should', 'done'),
-  ('FR-05', 'Connections', 'Staff create a connection for a customer and utility; the tariff is chosen from the customer category; a meter with a starting reading is created. Only one connection per utility per customer.', 'must', 'done'),
-  ('FR-06', 'Meter readings', 'Employee selects a meter; the system shows customer, utility and previous reading, and calculates consumption as the current value is typed.', 'must', 'done'),
-  ('FR-07', 'Meter readings', 'A reading lower than the previous reading, or dated on/before the last reading, is rejected.', 'must', 'done'),
-  ('FR-08', 'Billing', 'Saving a reading generates a bill automatically: slab charges + fixed charge + tax, with itemised rows, bill number and due date (+15 days).', 'must', 'done'),
-  ('FR-09', 'Billing', 'Staff list bills filtered by status and search; any user can open an allowed bill and print / save it as PDF.', 'must', 'done'),
-  ('FR-10', 'Payments', 'Customer pays a bill online by card, UPI, net banking or wallet (simulated); partial payments allowed; a receipt number is generated.', 'must', 'done'),
-  ('FR-11', 'Payments', 'Payment larger than the outstanding amount is rejected. Bill status changes to partial or paid automatically.', 'must', 'done'),
-  ('FR-12', 'Payments', 'Staff record counter (cash) payments and view all payments with totals by method.', 'should', 'done'),
-  ('FR-13', 'Complaints', 'Customer raises a complaint for a connection with urgency; staff view by status, assign to an employee, change priority/status and add resolution notes.', 'must', 'done'),
-  ('FR-14', 'Outages', 'Staff report an outage (utility, area, reason, start, estimated end); future outages are "scheduled". Staff mark outages resolved.', 'should', 'done'),
-  ('FR-15', 'Notifications', 'Customers are notified in-app of new bills, payments, outages in their area for their utilities, and complaint status changes.', 'should', 'done'),
-  ('FR-16', 'Tariffs', 'Admin edits slab rates, fixed charge and tax per plan; changes apply only to new bills.', 'must', 'done'),
-  ('FR-17', 'Employees', 'Admin views employees with workload and adds new employees.', 'should', 'done'),
-  ('FR-18', 'Dashboards', 'Admin/employee dashboard shows KPIs, billed amount per utility (6 months), collections, recent activity. Customer dashboard shows connections, current bills, monthly bill chart and recent bills.', 'should', 'done'),
-  ('FR-19', 'Reports', 'Admin sees usage per utility, area-wise consumption, billed amount by category, collection efficiency and overdue bills.', 'could', 'wip'),
-  ('FR-20', 'Customer portal', 'Customer views connections, usage history (per-utility charts), outages in their area and edits phone/address and password.', 'should', 'done'),
-  ('FR-21', 'Billing', 'Late-payment surcharge and automatic overdue reminders.', 'could', 'todo'),
-  ('FR-22', 'Billing', 'Downloadable server-generated PDF invoice and e-mail delivery.', 'could', 'todo'),
-  ('FR-23', 'Meters', 'Meter replacement workflow (mark faulty/replaced, new meter with baseline reading).', 'should', 'todo'),
-  ('FR-24', 'Data export', 'Export reports to CSV/Excel.', 'could', 'todo'),
-  ('FR-25', 'Payments', 'Real payment-gateway integration.', 'wont', 'todo'),
+  ('FR-01', 'Login', 'Users log in with username/email and password; passwords are stored hashed.', 'must', 'done'),
+  ('FR-02', 'Access', 'Each page only opens for its roles; others get "403", and logged-out users go to the login page.', 'must', 'done'),
+  ('FR-03', 'Customers', 'Staff add a customer (name, unique email, 10-digit phone, address, area, category, password).', 'must', 'done'),
+  ('FR-04', 'Customers', 'Staff search customers and open a profile with their connections and bills.', 'should', 'done'),
+  ('FR-05', 'Connections', 'Staff add a connection; the tariff is picked from the category and a meter is created. One per utility per customer.', 'must', 'done'),
+  ('FR-06', 'Readings', 'Picking a meter shows the customer, utility and last reading; consumption is shown while typing.', 'must', 'done'),
+  ('FR-07', 'Readings', 'Readings lower than the last one, or not after its date, are refused.', 'must', 'done'),
+  ('FR-08', 'Billing', 'Saving a reading creates the bill: slab charges + fixed charge + tax, itemised, due in 15 days.', 'must', 'done'),
+  ('FR-09', 'Billing', 'Staff list and filter bills; anyone allowed can open a bill and print it.', 'must', 'done'),
+  ('FR-10', 'Payments', 'Customers pay online by card, UPI, net banking or wallet (simulated), fully or in part, and get a receipt number.', 'must', 'done'),
+  ('FR-11', 'Payments', 'Paying more than is due is refused; the bill becomes partial or paid automatically.', 'must', 'done'),
+  ('FR-12', 'Payments', 'Staff record cash payments and see all payments with totals by method.', 'should', 'done'),
+  ('FR-13', 'Complaints', 'Customers raise complaints; staff assign, prioritise, update and resolve them.', 'must', 'done'),
+  ('FR-14', 'Outages', 'Staff report outages by utility and area (scheduled or active) and mark them resolved.', 'should', 'done'),
+  ('FR-15', 'Notifications', 'Customers get in-app notices for new bills, payments, outages in their area and complaint updates.', 'should', 'done'),
+  ('FR-16', 'Tariffs', 'Admin edits slab rates, fixed charge and tax; only new bills use the new values.', 'must', 'done'),
+  ('FR-17', 'Employees', 'Admin sees employees and their workload and can add new ones.', 'should', 'done'),
+  ('FR-18', 'Dashboards', 'Staff and customer dashboards with key numbers, charts and recent items.', 'should', 'done'),
+  ('FR-19', 'Reports', 'Usage per utility, by area and by category, collection rate and overdue bills.', 'could', 'wip'),
+  ('FR-20', 'Portal', 'Customers see connections, usage history and local outages, and edit phone, address and password.', 'should', 'done'),
+  ('FR-21', 'Billing', 'Late-payment charge and overdue reminders.', 'could', 'todo'),
+  ('FR-22', 'Billing', 'Server-generated PDF invoice and e-mail.', 'could', 'todo'),
+  ('FR-23', 'Meters', 'Replace a faulty meter and start the new one from its own reading.', 'should', 'todo'),
+  ('FR-24', 'Reports', 'Export reports to CSV/Excel.', 'could', 'todo'),
+  ('FR-25', 'Payments', 'Real payment gateway.', 'wont', 'todo'),
 ] %}
 <table>
-  <tr><th style="width:8%">ID</th><th style="width:15%">Module</th><th>Requirement</th><th style="width:10%">Priority</th><th style="width:12%">Status</th></tr>
+  <tr><th style="width:7%">ID</th><th style="width:13%">Area</th><th>Requirement</th><th style="width:10%">Priority</th><th style="width:10%">Status</th></tr>
   {% for id, mod, text, pr, st in FR %}
   <tr><td>{{ id }}</td><td>{{ mod }}</td><td>{{ text }}</td>
-      <td><span class="tag {{ pr }}">{{ {'must':'Must','should':'Should','could':'Could','wont':"Won't (now)"}[pr] }}</span></td>
-      <td><span class="tag {{ st }}">{{ {'done':'Implemented','wip':'Partial','todo':'Planned'}[st] }}</span></td></tr>
+      <td><span class="tag {{ pr }}">{{ {'must':'Must','should':'Should','could':'Could','wont':"Won't"}[pr] }}</span></td>
+      <td><span class="tag {{ st }}">{{ {'done':'Done','wip':'Partial','todo':'Planned'}[st] }}</span></td></tr>
   {% endfor %}
-  <caption>Functional requirements with MoSCoW priority and status</caption>
 </table>

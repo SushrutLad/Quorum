@@ -1,9 +1,8 @@
 {% if not is_report %}<h2>System Architecture</h2>{% endif %}
 <h3>Architecture diagram</h3>
-<p>EUMS uses a <b>three-tier (layered) client&ndash;server architecture</b> with the Model-View-Controller idea:
-templates are the <i>view</i>, Flask route functions are the <i>controller</i>, and the SQLite tables with
-<code>billing.py</code> form the <i>model</i>. The browser sends ordinary HTTP GET/POST requests (HTML forms); the server
-returns finished HTML pages. One small JSON endpoint gives the previous meter reading to the reading form.</p>
+<p>EUMS is a three-layer client&ndash;server app, loosely following MVC: the templates are the view, the Flask route
+functions are the controller, and the SQLite tables plus <code>billing.py</code> are the model. The browser sends normal
+form GET/POST requests and gets finished HTML pages back. The only JSON endpoint is the one that gives the reading form the last meter reading.</p>
 <figure class="tall">{{ svg('architecture') }}<figcaption>Three-tier architecture of EUMS</figcaption></figure>
 <figure style="max-width:85%;margin:auto">{{ svg('dfd') }}<figcaption>Context-level (Level 0) data flow diagram</figcaption></figure>
 <h3>Module description</h3>

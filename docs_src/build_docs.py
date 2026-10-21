@@ -95,9 +95,7 @@ def count_loc():
 
 
 # ------------------------------------------------------------------ documents to build
-REPORT = ["cover", "toc", "s01_problem", "s02_objectives", "s03_process", "s04_scope", "s05_stakeholders",
-          "s06_requirements", "s07_usecases", "s08_design", "s09_tech", "s10_implementation", "s11_testing",
-          "s12_management", "s13_contribution", "s14_challenges", "s15_future", "s16_references", "appendix"]
+REPORT = ["cover", "r_report"]
 
 DOCS = [
     ("01_Report/MidSem_Project_Report.pdf", "Mid-Semester Project Report", REPORT),
@@ -157,7 +155,7 @@ def main():
                                      f'justify-content:space-between"><span>{team["group_number"]} &middot; EUMS &middot; '
                                      f'{title}</span><span><span class="pageNumber"></span> / '
                                      f'<span class="totalPages"></span></span></div>',
-                     margin={"top": "16mm", "bottom": "18mm", "left": "16mm", "right": "16mm"})
+                     margin={"top": "14mm", "bottom": "16mm", "left": "15mm", "right": "15mm"})
             print("built", path)
         browser.close()
     os.remove(os.path.join(HERE, "_build.html"))

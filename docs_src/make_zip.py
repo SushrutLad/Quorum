@@ -17,7 +17,7 @@ group = sys.argv[2] if len(sys.argv) > 2 else "GroupXX"
 name = f"{section}_{group}_EnergyUtilityManagement_MidSem"
 
 # Save the git history as contribution evidence
-log = subprocess.run(["git", "log", "--all", "--date=short", "--pretty=format:%h %ad %an  %s"],
+log = subprocess.run(["git", "log", "--date=short", "--pretty=format:%h %ad %an  %s"],
                      cwd=ROOT, capture_output=True, text=True).stdout
 with open(os.path.join(ROOT, "06_Project_Management", "git_log.txt"), "w") as f:
     f.write(log + "\n")
@@ -32,4 +32,5 @@ with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
                     continue
                 full = os.path.join(dirpath, file)
                 z.write(full, os.path.join(name, os.path.relpath(full, ROOT)))
+    z.write(os.path.join(ROOT, "README.md"), os.path.join(name, "README.md"))
 print("Created", out)

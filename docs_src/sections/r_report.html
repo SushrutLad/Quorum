@@ -1,0 +1,325 @@
+<div class="toc">
+  <h2 class="plain" style="margin-top:0">Contents</h2>
+  <p>1. Problem statement and motivation &middot; 2. Objectives &middot; 3. Process model and feasibility study &middot;
+  4. Scope &middot; 5. Stakeholders &middot; 6. Requirements &middot; 7. Use cases and user stories &middot; 8. System design &middot;
+  9. Technology stack &middot; 10. Implementation progress &middot; 11. Testing &middot; 12. Project management &middot;
+  13. Individual contribution &middot; 14. Challenges &middot; 15. Remaining work &middot; 16. References &middot; Appendix</p>
+  <p class="small">Demo video: {{ team.demo_video_link }}. The SRS, use cases, full design document, UML diagrams, UI screens,
+  test cases and project-management records are also in folders 02&ndash;06 of the ZIP as separate PDFs.</p>
+</div>
+
+<h2>Problem Statement and Motivation</h2>
+<p>Many small utility offices and housing societies in India still handle electricity, water and gas billing on paper.
+A meter reader writes readings in a register, someone in the office types them into a spreadsheet, and the bill is
+worked out by hand from a tariff table. Going through sample bills and the way these offices usually work, the same problems
+kept coming up: slab rates get applied wrongly, a typo in a reading gives a huge (or negative) bill, payments
+can only be made at a counter, complaints get lost, and the manager has no quick way to see how much money is still due.</p>
+<p><b>Problem statement:</b> build a web application that keeps customers, connections, meters, readings, bills,
+payments, complaints and outages for all three utilities in one database, with separate views for the admin,
+employees and customers.</p>
+<p>This topic was given to us for our DBMS project. Since it is a proper multi-user system with real business rules, we
+decided to build the same system for SEPM too. The DBMS side looks at the schema, triggers and views; this report is
+about how we engineered it, phase by phase.</p>
+
+<h2>Project Objectives</h2>
+<ol>
+  <li>Let employees enter meter readings in a form that shows the last reading and refuses impossible values.</li>
+  <li>Generate the bill automatically from each reading using slab tariffs, a fixed charge and tax.</li>
+  <li>Give customers a portal to see their bills and usage, pay online and raise complaints.</li>
+  <li>Track complaints and outages, and tell affected customers automatically.</li>
+  <li>Give the admin a dashboard with revenue, dues, complaints and consumption by area.</li>
+  <li>Keep the data correct with database constraints and triggers, and keep each user to their own pages.</li>
+  <li>Follow the Waterfall model properly, with a document at the end of each phase.</li>
+</ol>
+
+<h2>Process Model and Feasibility Study</h2>
+<h3>Why Waterfall</h3>
+<p>We went with the Waterfall model. Our requirements were clear from the start (metering and slab billing follow fixed
+rules), the DBMS course needed the full database design before any coding, and the semester has fixed checkpoints
+that line up well with finishing phases. Most of us are also new to web development, so a clear order of steps was
+easier to follow than sprints. To reduce the usual Waterfall risk of finding mistakes late, we reviewed each phase's
+output as a team before moving on, and wrote tests while coding instead of leaving them all for the end.</p>
+<figure style="max-width:78%;margin:6px auto">{{ svg('waterfall') }}<figcaption>Waterfall phases and where we are at mid-semester</figcaption></figure>
+<h3>Feasibility study</h3>
+<table>
+  <tr><th style="width:15%">Type</th><th>What we checked</th><th style="width:13%">Result</th></tr>
+  <tr><td>Technical</td><td>Needs only Python, Flask, SQLite and a browser. All free, run on our laptops, no database server. SQLite supports keys, CHECK constraints, triggers, views and indexes. We already know Python and SQL; Flask took a few days to pick up.</td><td>Feasible</td></tr>
+  <tr><td>Economic</td><td>Software and hardware cost nothing (open source, own laptops). Payment gateway is simulated. Effort is about 4 people &times; 6 hours/week &times; 14 weeks &asymp; 336 hours. For a real office the savings come from fewer billing errors and less re-typing.</td><td>Feasible</td></tr>
+  <tr><td>Operational</td><td>Staff and customers already use phones and UPI apps. One task per page, familiar layout, error messages in plain words. Little training needed.</td><td>Feasible</td></tr>
+  <tr><td>Schedule</td><td>About 4 weeks for feasibility, requirements and design, 6 for coding, 4 for testing and wrap-up. The core was done by mid-sem.</td><td>Feasible</td></tr>
+  <tr><td>Legal</td><td>Only made-up sample data. Passwords are hashed and customers only see their own data. A real version would need to follow the DPDP Act 2023 and RBI rules for payments.</td><td>Feasible for a prototype</td></tr>
+  <caption>Feasibility summary</caption>
+</table>
+
+<h2>Scope of the Project</h2>
+<div class="two">
+<div>
+<h3>Included</h3>
+<ul>
+  <li>Login with three roles: admin, employee, customer</li>
+  <li>Customer registration, search and profile</li>
+  <li>Connections and meters for electricity, water and gas</li>
+  <li>Meter reading entry with checks</li>
+  <li>Automatic slab billing and printable bills</li>
+  <li>Online (simulated), counter and part payments</li>
+  <li>Complaints, outages and in-app notifications</li>
+  <li>Tariff editing, employees, dashboards and reports</li>
+</ul>
+</div>
+<div>
+<h3>Excluded</h3>
+<ul>
+  <li>Real payment gateway (payments are simulated)</li>
+  <li>Smart meters / automatic readings</li>
+  <li>SMS and e-mail alerts</li>
+  <li>Mobile app (the site works on phones instead)</li>
+  <li>Late fees, GST invoices, accounting export</li>
+</ul>
+<h3>Assumptions and constraints</h3>
+<ul>
+  <li>One connection per utility per customer, one active meter per connection</li>
+  <li>Meters are cumulative, so readings only go up</li>
+  <li>Tariff depends on utility and category (residential or commercial)</li>
+  <li>Bills are due 15 days after the bill date</li>
+  <li>Free software only, must run on a student laptop, one semester</li>
+</ul>
+</div>
+</div>
+
+<h2>Stakeholder Identification</h2>
+<table>
+  <tr><th style="width:22%">Stakeholder</th><th>What they need</th><th style="width:32%">Where they use the system</th></tr>
+  <tr><td>Admin (utility manager)</td><td>Control over tariffs and staff, a view of revenue and dues</td><td>Dashboard, tariffs, employees, reports</td></tr>
+  <tr><td>Meter reader</td><td>Quick reading entry without mistakes</td><td>Add Meter Reading</td></tr>
+  <tr><td>Billing officer</td><td>Correct bills, record cash payments, add customers</td><td>Customers, connections, billing, payments</td></tr>
+  <tr><td>Technician</td><td>See and close complaints and outages</td><td>Complaints, outages</td></tr>
+  <tr><td>Customer</td><td>See and pay bills, track usage, report problems</td><td>Customer portal</td></tr>
+  <tr><td>Instructor / evaluator</td><td>Proof of SEPM and DBMS practice, a working demo</td><td>Report, demo, code</td></tr>
+  <tr><td>Regulator, bank (external)</td><td>Tariffs applied correctly, safe payments</td><td>Indirect</td></tr>
+</table>
+
+<h2>Requirements Specification</h2>
+<p>We collected requirements from the project brief, sample electricity and water bills, published slab tariffs, a
+few existing self-service portals, and by working through what each type of user needs. The full SRS is in
+<code>02_Requirements/SRS.pdf</code>.</p>
+<h3>Functional requirements</h3>
+{% include "fr_table.html" %}
+<h3>Non-functional requirements</h3>
+{% include "nfr_table.html" %}
+<h3>Prioritisation</h3>
+<p>We used MoSCoW. Must items are the minimum system (reading &rarr; bill &rarr; payment, access control,
+complaints), and we built all of them first. Out of 25 functional requirements: 12 Must (all done), 8 Should (7 done),
+4 Could (1 partly done) and 1 Won't for now.</p>
+
+<h2>Requirements Model: Use Cases and User Stories</h2>
+<p>There are three actors. "Employee" covers the meter reader, billing officer and technician, since they share one
+login role. Generating a bill is never started by a person; it is part of recording a reading.</p>
+<figure class="tall">{{ svg('usecase') }}<figcaption>Use-case diagram</figcaption></figure>
+<table class="kv">
+  <tr><th colspan="2">UC-04 Record meter reading (includes UC-05 Generate bill)</th></tr>
+  <tr><td>Actor / pre-condition</td><td>Employee, logged in; connection and meter are active</td></tr>
+  <tr><td>Main flow</td><td>1. Open Add Reading. 2. Pick a meter; the system fills in the customer, utility and last reading.
+    3. Type the new reading; consumption shows straight away. 4. Enter the date and save. 5. The system saves the reading,
+    works out the bill from the tariff slabs, saves it and notifies the customer. 6. The new bill opens.</td></tr>
+  <tr><td>Exceptions</td><td>Reading lower than the last one: error shown and Save disabled; the database trigger also blocks it.
+    Date not after the last reading: blocked. Same date twice: blocked.</td></tr>
+  <tr><td>Post-condition</td><td>Reading and bill saved; customer gets a "New bill generated" notification</td></tr>
+</table>
+<p class="small">The other use cases (pay bill, complaints, outages, login) are written out in
+<code>02_Requirements/Use_Cases_or_User_Stories.pdf</code>.</p>
+<h3>User stories</h3>
+<table>
+  <tr><th style="width:44%">Story</th><th>Acceptance criteria</th><th style="width:9%">Status</th></tr>
+  <tr><td>As a meter reader, I want to see the last reading when I pick a meter, so I don't type the wrong number.</td><td>Last value and date shown; consumption updates while typing; lower values block Save.</td><td>Done</td></tr>
+  <tr><td>As a billing officer, I want bills worked out from the slabs automatically.</td><td>250 kWh on the domestic plan gives &#8377;1,207.50 with two slab lines, fixed charge and 5% tax.</td><td>Done</td></tr>
+  <tr><td>As a customer, I want to pay by UPI or card instead of going to the office.</td><td>Receipt number generated; bill turns Paid; paying more than due is refused.</td><td>Done</td></tr>
+  <tr><td>As a customer, I want to hear about outages in my area.</td><td>Everyone in that area with that utility is notified; nobody else is.</td><td>Done</td></tr>
+  <tr><td>As an admin, I want to change tariff rates without changing old bills.</td><td>New rates apply to the next bill only.</td><td>Done</td></tr>
+  <tr><td>As a billing officer, I want to replace a faulty meter without breaking its history.</td><td>Old meter marked Replaced; new meter starts from its own reading.</td><td>Planned</td></tr>
+</table>
+
+<h2>System Design</h2>
+<h3>Architecture</h3>
+<p>The system has three layers. The browser shows HTML pages, Flask route functions handle requests and run the
+business logic, and SQLite stores everything. Pages are built on the server with Jinja templates, so there is very little
+JavaScript; the only API call is the one that fetches the last meter reading for the reading form.</p>
+<figure style="max-width:72%;margin:auto">{{ svg('architecture') }}<figcaption>Three-layer architecture</figcaption></figure>
+<table>
+  <tr><th style="width:22%">Module</th><th>What it does</th></tr>
+  <tr><td><code>app.py</code>, <code>auth.py</code></td><td>Sets up the app, login/logout, and the check that each page is opened by the right role</td></tr>
+  <tr><td><code>db.py</code></td><td>Opens one database connection per request and closes it after</td></tr>
+  <tr><td><code>billing.py</code></td><td>Slab bill calculation (a plain function we can unit test) and saving the bill</td></tr>
+  <tr><td><code>routes_staff.py</code></td><td>All admin and employee pages</td></tr>
+  <tr><td><code>routes_customer.py</code></td><td>Customer portal; every query is limited to the logged-in customer</td></tr>
+  <tr><td><code>schema.sql</code>, <code>seed.py</code></td><td>Tables, triggers and views; demo data loader</td></tr>
+</table>
+<h3>Database design</h3>
+<figure class="tall">{{ svg('er') }}<figcaption>ER diagram (16 tables)</figcaption></figure>
+<p>The schema is in 3NF: repeating data such as readings, payments and slabs sits in its own tables, and tariff rates are
+stored once in <code>tariff_plans</code> / <code>tariff_slabs</code> instead of on each connection. The one place we
+broke this on purpose is <code>bills</code>, which keeps a copy of the units and charges at the time the bill was
+made. Tariffs change, but an issued bill should never change.</p>
+<table>
+  <tr><th style="width:26%">Trigger / view</th><th>Rule it enforces</th></tr>
+  <tr><td>trg_reading_monotonic, trg_reading_date_order</td><td>A new reading can't be lower than the last one or dated before it</td></tr>
+  <tr><td>trg_no_overpay</td><td>A payment can't be more than what is still owed</td></tr>
+  <tr><td>trg_payment_status</td><td>After a payment, mark the bill paid or partial and notify the customer</td></tr>
+  <tr><td>trg_bill_notify, trg_outage_notify, trg_complaint_status</td><td>Send notifications for new bills, outages in the customer's area and complaint updates</td></tr>
+  <tr><td>v_bill_summary, v_overdue_bills, v_monthly_consumption</td><td>Ready-made joins used by the bill pages, overdue list and charts</td></tr>
+</table>
+<p><b>Billing formula.</b> For each slab: units in slab = max(0, min(U, upper limit) &minus; lower limit). Energy charge =
+sum of units in slab &times; rate. Total = (energy + fixed) &times; (1 + tax%). For 250 kWh on the domestic plan:
+100 &times; 3.50 + 150 &times; 5.00 = 1,100, plus 50 fixed = 1,150, plus 5% tax = &#8377;1,207.50.</p>
+<h3>Sequence diagram</h3>
+<figure class="tall">{{ svg('sequence') }}<figcaption>Recording a reading, generating the bill and paying it</figcaption></figure>
+<p class="small">The activity diagram, class diagram and data flow diagram are in <code>03_Design/UML_Diagrams.pdf</code>
+and <code>03_Design/Architecture_Diagram.pdf</code>. The UI follows our reference mock-up (dark sidebar, white cards),
+with one page per feature; all screens are in <code>03_Design/UI_Screens.pdf</code>.</p>
+
+<h2>Technology Stack and Justification</h2>
+<table>
+  <tr><th style="width:16%">Part</th><th style="width:22%">What we used</th><th>Why</th></tr>
+  <tr><td>Language</td><td>Python 3</td><td>We all learned it in earlier semesters</td></tr>
+  <tr><td>Web framework</td><td>Flask</td><td>Small and easy: one function per page, no build step. We found Django too much to learn in the time we had</td></tr>
+  <tr><td>Database</td><td>SQLite</td><td>Comes with Python, single file, no server, but still has triggers and views. The SQL can move to MySQL later</td></tr>
+  <tr><td>Frontend</td><td>HTML templates + CSS</td><td>No React or Node tooling to learn; pages are rendered by the server</td></tr>
+  <tr><td>Charts / tests</td><td>Chart.js, pytest</td><td>One script file for charts; simple test functions</td></tr>
+  <tr><td>Version control</td><td>Git, GitHub</td><td>Shared code and a history of who did what</td></tr>
+</table>
+<p>Only Flask has to be installed to run the app.</p>
+
+<h2>Implementation Progress</h2>
+<p>The app is roughly 60% done ({{ '{:,}'.format(loc) }} lines of code, not counting tests). The end-to-end feature
+works: an employee enters a reading, the bill is created automatically, the customer pays it online and gets a
+notification.</p>
+<div class="two">
+<div><h3>Completed</h3>
+<ul>
+  <li>Login and role-based access</li>
+  <li>Customers, connections and meters</li>
+  <li>Meter readings with live checks</li>
+  <li>Automatic slab billing, printable bills</li>
+  <li>Online, counter and part payments</li>
+  <li>Complaints and outages with notifications</li>
+  <li>Tariffs, employees, both dashboards</li>
+  <li>Customer usage history and profile</li>
+</ul></div>
+<div><h3>Still in progress</h3>
+<ul>
+  <li>Reports: date filter and CSV export</li>
+  <li>Meter replacement</li>
+  <li>Late-payment charges and reminders</li>
+  <li>PDF invoice generated on the server</li>
+  <li>MySQL version of the schema (for DBMS)</li>
+  <li>CSRF protection on forms</li>
+</ul></div>
+</div>
+<div class="two">
+  <figure><img src="{{ shot('07_reading_form') }}"><figcaption>Add Meter Reading (employee)</figcaption></figure>
+  <figure><img src="{{ shot('09_bill_generated') }}" style="max-height:58mm"><figcaption>Bill created from the reading</figcaption></figure>
+  <figure><img src="{{ shot('02_admin_dashboard') }}"><figcaption>Admin dashboard</figcaption></figure>
+  <figure><img src="{{ shot('16_customer_dashboard') }}"><figcaption>Customer dashboard</figcaption></figure>
+</div>
+<h3>Key implementation decisions</h3>
+<ul>
+  <li><b>Rules live in the database.</b> Readings going backwards and overpayments are blocked by triggers, so even a bug in a page can't save bad data. The page just shows the trigger's message.</li>
+  <li><b>Check readings twice.</b> JavaScript warns the user instantly, and the trigger is the real guarantee.</li>
+  <li><b>Billing is a separate function</b>, so we could test it against amounts we worked out by hand.</li>
+  <li><b>A reading and its bill are saved together</b> in one transaction; if one fails, neither is kept.</li>
+  <li><b>Customers never pick an ID in the URL.</b> Their pages always use the logged-in account, and opening someone else's bill gives a 403.</li>
+  <li><b>No secrets in the code.</b> The secret key goes in a <code>config.py</code> that git ignores.</li>
+</ul>
+
+<h2>Testing Performed</h2>
+<p>We have 6 unit tests for the billing formula and 14 functional tests that click through the real app using Flask's
+test client, each with a fresh copy of the demo database. Running <code>python -m pytest -v</code> gives:
+<b>{{ summary }}</b>. We also checked every page by hand for each role. The full log is in
+<code>05_Testing/Test_Evidence/</code>.</p>
+<table>
+  <tr><th style="width:6%">ID</th><th style="width:15%">Feature</th><th style="width:27%">Input</th><th>Expected result</th><th style="width:10%">Actual</th><th style="width:7%">Status</th></tr>
+  {% for id, fn, feature, inp, expected in tests %}
+  {% set r = results.get(fn, 'NOT RUN') %}
+  <tr><td>{{ id }}</td><td>{{ feature }}</td><td>{{ inp }}</td><td>{{ expected }}</td><td>{{ 'As expected' if r == 'PASS' else 'See log' }}</td><td class="{{ 'pass' if r == 'PASS' else 'fail' }}">{{ r }}</td></tr>
+  {% endfor %}
+</table>
+<p>Still to do: testing by someone outside the team, boundary and basic security checks, a run with 1,000+ customers,
+and acceptance testing with classmates.</p>
+
+<h2>Project-Management Status</h2>
+<figure>{{ svg('gantt') }}<figcaption>Original plan (Gantt chart)</figcaption></figure>
+<table>
+  <tr><th>Phase</th><th>Planned by mid-sem</th><th>Actual</th></tr>
+  <tr><td>Feasibility, requirements, design</td><td>100%</td><td>100%</td></tr>
+  <tr><td>Implementation</td><td>50%</td><td>About 60% (19 of 25 requirements, 1 partial)</td></tr>
+  <tr><td>Testing</td><td>20%</td><td>20 automated tests, all passing</td></tr>
+  <tr><td>MySQL version (DBMS)</td><td>Started</td><td>Not started, moved to weeks 9&ndash;10</td></tr>
+</table>
+<p><b>Delayed or pending:</b> the MySQL port (we chose SQLite first to keep setup simple), report filters and export,
+meter replacement, late fees and CSRF protection.</p>
+<p><b>Estimate (basic COCOMO, organic mode).</b> We expect about {{ kloc }} KLOC when finished. Effort =
+2.4 &times; {{ kloc }}<sup>1.05</sup> &asymp; {{ '%.1f'|format(effort) }} person-months, duration = 2.5 &times;
+E<sup>0.38</sup> &asymp; {{ '%.1f'|format(duration) }} months. Our real effort is about 2 person-months (four of us
+part-time), which is much less. COCOMO is tuned for industry projects with heavier documentation and review, so it
+overestimates something this small. We treat it as an upper limit and cut Could-priority features if we run short.</p>
+<table>
+  <tr><th>Risk</th><th style="width:15%">Likelihood / impact</th><th>What we're doing about it</th></tr>
+  <tr><td>Team new to web development</td><td>High / High</td><td>Simplest stack possible; built one page together and used it as the pattern</td></tr>
+  <tr><td>Wrong bill amounts</td><td>Medium / High</td><td>Billing unit-tested against hand calculations; bills keep their breakdown</td></tr>
+  <tr><td>Bad data (lower readings, overpaying)</td><td>High / High</td><td>Triggers plus form checks, covered by tests</td></tr>
+  <tr><td>A customer seeing someone else's data</td><td>Low / High</td><td>Ownership check on every customer page</td></tr>
+  <tr><td>Finding requirement mistakes late</td><td>Medium / Medium</td><td>Review at the end of each phase; end-to-end feature built early</td></tr>
+  <tr><td>Exams clashing with deadlines</td><td>High / Medium</td><td>Must items first; weekly meeting; swap tasks when someone is busy</td></tr>
+</table>
+
+<h2>Individual Contribution</h2>
+<table>
+  <tr><th style="width:24%">Name</th><th style="width:15%">Reg. no.</th><th>Main work</th></tr>
+  {% for m in team.members %}<tr><td>{{ m.name }}</td><td>{{ m.reg_no }}</td><td>{{ m.role }}</td></tr>{% endfor %}
+</table>
+<p class="small">The task-allocation table, meeting log, weekly progress and signed declaration are in
+<code>06_Project_Management/</code>, along with the git log.</p>
+
+<h2>Challenges Faced and Solutions Attempted</h2>
+<ul>
+  <li><b>Most of us hadn't built a web app before.</b> We used Flask with plain HTML, built one page together, and copied that pattern for the rest.</li>
+  <li><b>Slab billing was easy to get wrong</b> at the slab edges and with decimals. We wrote it as one small function and tested edge cases.</li>
+  <li><b>Readings going backwards</b> if someone skips the form. We added triggers so the database itself refuses them.</li>
+  <li><b>Old bills changing after a tariff edit.</b> We store a copy of the charges on each bill.</li>
+  <li><b>Charts mixing kWh, kL and gas units.</b> Comparison charts use rupees; usage charts are drawn per utility.</li>
+  <li><b>Tests affecting each other.</b> Each test now gets its own fresh database file.</li>
+</ul>
+
+<h2>Work Planned for the Remaining Semester</h2>
+<table>
+  <tr><th style="width:12%">Week</th><th>Work</th></tr>
+  <tr><td>9</td><td>Meter replacement, CSRF protection</td></tr>
+  <tr><td>9&ndash;10</td><td>MySQL version with a stored procedure for billing (DBMS)</td></tr>
+  <tr><td>10&ndash;11</td><td>Late fees and reminders, report filters and CSV export, PDF invoice</td></tr>
+  <tr><td>12&ndash;13</td><td>System, security and performance testing; acceptance testing with classmates; bug fixes</td></tr>
+  <tr><td>14</td><td>User guide, final report and final demo</td></tr>
+</table>
+
+<h2>References</h2>
+<ol class="small">
+  <li>R. S. Pressman and B. R. Maxim, <i>Software Engineering: A Practitioner's Approach</i>, 9th ed., McGraw-Hill, 2019.</li>
+  <li>I. Sommerville, <i>Software Engineering</i>, 10th ed., Pearson, 2015.</li>
+  <li>IEEE Std 830-1998, Recommended Practice for Software Requirements Specifications.</li>
+  <li>B. W. Boehm, <i>Software Engineering Economics</i>, Prentice-Hall, 1981.</li>
+  <li>A. Silberschatz, H. F. Korth, S. Sudarshan, <i>Database System Concepts</i>, 7th ed., McGraw-Hill, 2019.</li>
+  <li>Flask, SQLite, Chart.js and pytest documentation (flask.palletsprojects.com, sqlite.org, chartjs.org, docs.pytest.org).</li>
+  <li>UPERC domestic and commercial electricity tariff schedules (used as a model for our slabs; our rates are illustrative).</li>
+</ol>
+
+<h2 class="plain">Appendix: AI-Tool Disclosure and How to Run</h2>
+<table>
+  <tr><th style="width:18%">Tool</th><th style="width:22%">Used for</th><th>What it produced</th><th style="width:28%">How we checked it</th></tr>
+  <tr><td>____________</td><td>____________</td><td>____________</td><td>____________</td></tr>
+</table>
+<p class="small">Section 6 of the evaluation guidelines asks every group to fill this in if a generative AI tool was used
+for code, documentation, diagrams, tests or debugging.</p>
+<pre>cd 04_Source_Code
+pip install -r requirements.txt
+python seed.py          # creates the demo database
+python app.py           # open http://127.0.0.1:5000
+python -m pytest -v     # runs the 20 tests</pre>
+<p class="small">Logins: admin / admin123 &middot; reader / reader123 &middot; rahul@example.com / pass123 (sample data only).</p>

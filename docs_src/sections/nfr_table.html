@@ -1,16 +1,14 @@
 <table>
-  <tr><th style="width:9%">ID</th><th style="width:16%">Category</th><th>Requirement</th><th style="width:26%">How it is met / measured</th></tr>
-  <tr><td>NFR-01</td><td>Security</td><td>Passwords never stored in plain text.</td><td>Werkzeug salted hash (scrypt/PBKDF2)</td></tr>
-  <tr><td>NFR-02</td><td>Security / privacy</td><td>A customer can access only their own records.</td><td>Every portal query filtered by logged-in customer; 403 otherwise (test IT-05)</td></tr>
-  <tr><td>NFR-03</td><td>Security</td><td>No secrets in source code.</td><td><code>config.py</code> is git-ignored; only <code>config.example.py</code> is committed</td></tr>
-  <tr><td>NFR-04</td><td>Data integrity</td><td>Business rules hold even if application code has a bug.</td><td>CHECK, UNIQUE, FK constraints and 7 triggers in the database</td></tr>
-  <tr><td>NFR-05</td><td>Accuracy</td><td>Bills are correct to the paisa.</td><td>Amounts rounded to 2 decimals; unit tests UT-01..06</td></tr>
-  <tr><td>NFR-06</td><td>Auditability</td><td>Issued bills never change when tariffs change.</td><td>Charges stored on the bill (snapshot); test IT-14</td></tr>
-  <tr><td>NFR-07</td><td>Performance</td><td>Pages load in under 1 second for 1,000 customers on a laptop.</td><td>Indexes on readings, bills, customers, complaints, notifications</td></tr>
-  <tr><td>NFR-08</td><td>Usability</td><td>A new employee can enter a reading without training.</td><td>One task per page, live consumption, plain-language errors</td></tr>
-  <tr><td>NFR-09</td><td>Portability</td><td>Runs on Windows, Linux, macOS with Python 3.10+.</td><td>Only Flask needed; SQLite is built into Python</td></tr>
-  <tr><td>NFR-10</td><td>Responsiveness</td><td>Usable on a phone screen (meter readers in the field).</td><td>Responsive CSS layout below 800 px</td></tr>
-  <tr><td>NFR-11</td><td>Maintainability</td><td>Code is easy for students to read and change.</td><td>Small files by role; billing logic separate from web code; automated tests</td></tr>
-  <tr><td>NFR-12</td><td>Reliability</td><td>A failed operation leaves no half-saved data.</td><td>Each action in one transaction; rollback on error</td></tr>
-  <caption>Non-functional requirements</caption>
+  <tr><th style="width:8%">ID</th><th style="width:15%">Type</th><th>Requirement</th><th style="width:34%">How we meet it</th></tr>
+  <tr><td>NFR-01</td><td>Security</td><td>Passwords are never stored as plain text</td><td>Salted hashes from Werkzeug</td></tr>
+  <tr><td>NFR-02</td><td>Privacy</td><td>Customers only see their own records</td><td>Queries filtered by the logged-in customer (test IT-05)</td></tr>
+  <tr><td>NFR-03</td><td>Security</td><td>No secrets in the code</td><td>Secret key in a git-ignored <code>config.py</code></td></tr>
+  <tr><td>NFR-04</td><td>Integrity</td><td>Business rules hold even if a page has a bug</td><td>Constraints and 7 triggers in the database</td></tr>
+  <tr><td>NFR-05</td><td>Accuracy</td><td>Bills are correct to the paisa</td><td>Rounding to 2 decimals; unit tests</td></tr>
+  <tr><td>NFR-06</td><td>Auditability</td><td>Issued bills never change</td><td>Charges copied onto the bill (test IT-14)</td></tr>
+  <tr><td>NFR-07</td><td>Performance</td><td>Pages load in under a second with 1,000 customers</td><td>Indexes on the busy columns</td></tr>
+  <tr><td>NFR-08</td><td>Usability</td><td>A new employee can enter a reading without training</td><td>One task per page, live feedback, plain error messages</td></tr>
+  <tr><td>NFR-09</td><td>Portability</td><td>Runs on Windows, Linux and macOS</td><td>Python + Flask only; SQLite is built in</td></tr>
+  <tr><td>NFR-10</td><td>Mobile</td><td>Usable on a phone in the field</td><td>Layout adapts below 800 px</td></tr>
+  <tr><td>NFR-11</td><td>Reliability</td><td>A failed action leaves nothing half-saved</td><td>One transaction per action, rolled back on error</td></tr>
 </table>
