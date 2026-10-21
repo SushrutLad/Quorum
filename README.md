@@ -79,7 +79,7 @@ This is the part the evaluators most want to see working.
    with the slab breakdown.
 5. Log out and log in as **sushrut@example.com / pass123**. The new bill is on the dashboard.
 6. Open **Bills & Payments → Pay**, choose UPI and pay. The bill turns **Paid** and a notification appears.
-7. Optional: log in as **admin**, go to **Outages → Report Outage** for Gomti Nagar, then log back in as Sushrut to see
+7. Optional: log in as **admin**, go to **Outages → Report Outage** for Teliyarganj, then log back in as Sushrut to see
    the alert.
 
 A suggested 5–7 minute script is in `07_Demo/DEMO_VIDEO_LINK.txt`.

@@ -10,7 +10,7 @@
     <div class="full"><label for="address">Address</label><input id="address" name="address" value="{{ form.address }}" required></div>
     <div><label for="area">Area</label>
       <select id="area" name="area" required>
-        {% for a in ['Gomti Nagar', 'Aliganj', 'Indira Nagar', 'Hazratganj', 'Alambagh'] %}
+        {% for a in ['Teliyarganj', 'Gomti Nagar', 'Aliganj', 'Indira Nagar', 'Hazratganj', 'Alambagh'] %}
           <option {{ 'selected' if form.area == a }}>{{ a }}</option>{% endfor %}
       </select></div>
     <div><label for="category">Category</label>

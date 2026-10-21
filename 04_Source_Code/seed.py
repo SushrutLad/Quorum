@@ -180,7 +180,7 @@ def seed(path):
     now = datetime.now().replace(minute=0, second=0, microsecond=0)
     fmt = "%Y-%m-%d %H:%M"
     outage_rows = [
-        (1, "Gomti Nagar", "Transformer fault", now - timedelta(hours=3), now + timedelta(hours=2), "active", None),
+        (1, "Teliyarganj", "Transformer fault", now - timedelta(hours=3), now + timedelta(hours=2), "active", None),
         (2, "Aliganj", "Main pipeline repair", now - timedelta(hours=5), now + timedelta(hours=4), "active", None),
         (1, "Indira Nagar", "Scheduled line maintenance", now + timedelta(days=1), now + timedelta(days=1, hours=4),
          "scheduled", None),
@@ -205,7 +205,7 @@ def seed(path):
         ("Bill payment received", "Rs 1,240.00 - Sushrut Lad", (datetime.now() - timedelta(hours=4)).strftime(fmt)),
         ("New complaint submitted", "Low water pressure - #CMP4501", (datetime.now() - timedelta(hours=3)).strftime(fmt)),
         ("Meter reading updated", "Meter MTR-E-1001", (datetime.now() - timedelta(hours=2)).strftime(fmt)),
-        ("Outage reported", "Area: Gomti Nagar", (datetime.now() - timedelta(hours=1)).strftime(fmt)),
+        ("Outage reported", "Area: Teliyarganj", (datetime.now() - timedelta(hours=1)).strftime(fmt)),
     ])
     db.commit()
     db.close()
