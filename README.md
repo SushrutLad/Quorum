@@ -1,6 +1,36 @@
 # EUMS – Energy & Utility Management System
 
-**SEPM Mid-Semester Submission** · Team: Sumit P Surendran (20243590), Sreethan Reddy (20243550),
+## How to run
+
+You need **Python 3.10 or newer** (download it from python.org; on Windows, tick *"Add Python to PATH"* while installing).
+
+```bash
+cd 04_Source_Code
+pip install -r requirements.txt
+python seed.py
+python app.py
+```
+
+Then open **http://127.0.0.1:5000** in your browser and log in:
+
+| Who | Username | Password |
+|---|---|---|
+| Admin | `admin` | `admin123` |
+| Employee (meter reader) | `reader` | `reader123` |
+| Customer | `sushrut@example.com` | `pass123` |
+
+**In VS Code:** File → Open Folder → pick `04_Source_Code`, open the terminal (Terminal → New Terminal) and run the
+four commands above (skip the `cd` line).
+
+- `seed.py` builds a fresh database with six months of sample data. Run it again whenever you want to reset the data.
+- Stop the app with **Ctrl + C**. Next time, just run `python app.py`.
+- Run the tests with `python -m pytest -v`. You should see **20 passed**.
+- If `python` isn't found, try `py` (Windows) or `python3` (Mac). If port 5000 is busy (common on Mac), run
+  `flask --app app run --port 5001` and open http://127.0.0.1:5001 instead.
+
+---
+
+**SEPM Mid-Semester Submission · CSEF · Group 3** · Team: Sumit P Surendran (20243590), Sreethan Reddy (20243550),
 Sushrut Lad (20243551), Viswajith (20243559)
 
 This is our SEPM project, which we're doing together with our DBMS project. It's a web app for a utility office that
@@ -11,32 +41,7 @@ This README walks through each item on the mid-sem evaluation list and where to 
 
 ---
 
-## 1. Run the app first (5 minutes)
-
-You need Python 3.10 or newer.
-
-```bash
-cd 04_Source_Code
-pip install -r requirements.txt
-python seed.py
-python app.py
-```
-
-Open **http://127.0.0.1:5000** and log in with one of these:
-
-| Who | Username | Password |
-|---|---|---|
-| Admin | `admin` | `admin123` |
-| Employee (meter reader) | `reader` | `reader123` |
-| Customer | `sushrut@example.com` | `pass123` |
-
-`seed.py` builds a fresh database with six months of sample data. Run it again any time you want to reset everything.
-
-To run the tests: `python -m pytest -v` (inside `04_Source_Code`). You should see **20 passed**.
-
----
-
-## 2. Where each requirement is
+## 1. Where each requirement is
 
 | Evaluation item | Where it is |
 |---|---|
@@ -66,7 +71,7 @@ To run the tests: `python -m pytest -v` (inside `04_Source_Code`). You should se
 
 ---
 
-## 3. Showing the end-to-end feature
+## 2. Showing the end-to-end feature
 
 This is the part the evaluators most want to see working.
 
@@ -83,16 +88,15 @@ This is the part the evaluators most want to see working.
 
 ---
 
-## 4. Things still to fill in before uploading
+## 3. Things still to fill in before uploading
 
-- [ ] **Group number and section** – edit `docs_src/team.json`, then rebuild the PDFs (section 5 below)
 - [ ] **AI-tool disclosure** – section 6 of the guidelines asks for this if any AI tool was used. Fill in the table
       in the report appendix.
 - [ ] Check there are no passwords or keys anywhere. The only passwords are the sample demo logins above.
 
 ---
 
-## 5. Rebuilding the PDFs and the ZIP
+## 4. Rebuilding the PDFs and the ZIP
 
 Only needed after you change `docs_src/team.json` or any text.
 
@@ -100,10 +104,10 @@ Only needed after you change `docs_src/team.json` or any text.
 pip install flask pytest playwright
 python -m playwright install chromium      # one time only
 python docs_src/build_docs.py              # rebuilds every PDF and re-runs the tests
-python docs_src/make_zip.py A Group05      # use your own section and group number
+python docs_src/make_zip.py CSEF Group3
 ```
 
-That creates `A_Group05_EnergyUtilityManagement_MidSem.zip`, named the way the guidelines ask
+That creates `CSEF_Group3_EnergyUtilityManagement_MidSem.zip`, named the way the guidelines ask
 (`Section_GroupNumber_ProjectTitle_MidSem.zip`). Open the ZIP once to check it before one of us uploads it to Moodle.
 
 The report text lives in `docs_src/sections/` as HTML files if you want to edit wording.
