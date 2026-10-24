@@ -3,7 +3,7 @@
   <p>1. Problem statement and motivation &middot; 2. Objectives &middot; 3. Process model and feasibility study &middot;
   4. Scope &middot; 5. Stakeholders &middot; 6. Requirements &middot; 7. Use cases and user stories &middot; 8. System design &middot;
   9. Technology stack &middot; 10. Implementation progress &middot; 11. Testing &middot; 12. Project management &middot;
-  13. Individual contribution &middot; 14. Challenges &middot; 15. Remaining work &middot; 16. References &middot; Appendix</p>
+  13. Individual contribution &middot; 14. Remaining work &middot; 15. References &middot; Appendix</p>
   <p class="small">The SRS, use cases, full design document, UML diagrams, UI screens,
   test cases and project-management records are also in folders 02&ndash;06 of the ZIP as separate PDFs.</p>
 </div>
@@ -277,16 +277,6 @@ overestimates something this small. We treat it as an upper limit and cut Could-
   {% for m in team.members %}<tr><td>{{ m.name }}</td><td>{{ m.reg_no }}</td><td>{{ m.role }}</td></tr>{% endfor %}
 </table>
 <p class="small">The full task-allocation table and the git log are in <code>06_Project_Management/</code>.</p>
-
-<h2>Challenges Faced and Solutions Attempted</h2>
-<ul>
-  <li><b>Most of us hadn't built a web app before.</b> We used Flask with plain HTML, built one page together, and copied that pattern for the rest.</li>
-  <li><b>Slab billing was easy to get wrong</b> at the slab edges and with decimals. We wrote it as one small function and tested edge cases.</li>
-  <li><b>Readings going backwards</b> if someone skips the form. We added triggers so the database itself refuses them.</li>
-  <li><b>Old bills changing after a tariff edit.</b> We store a copy of the charges on each bill.</li>
-  <li><b>Charts mixing kWh, kL and gas units.</b> Comparison charts use rupees; usage charts are drawn per utility.</li>
-  <li><b>Tests affecting each other.</b> Each test now gets its own fresh database file.</li>
-</ul>
 
 <h2>Work Planned for the Remaining Semester</h2>
 <table>
