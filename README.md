@@ -90,8 +90,6 @@ This is the part the evaluators most want to see working.
 
 ## 3. Things still to fill in before uploading
 
-- [ ] **AI-tool disclosure** – section 6 of the guidelines asks for this if any AI tool was used. Fill in the table
-      in the report appendix.
 - [ ] Check there are no passwords or keys anywhere. The only passwords are the sample demo logins above.
 
 ---
