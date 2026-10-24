@@ -1,6 +1,6 @@
 """Builds every PDF in the submission folders from the HTML sections in docs_src/.
 
-    1. Fill in docs_src/team.json (names, registration numbers, group, video link)
+    1. Fill in docs_src/team.json (names, registration numbers, group, section)
     2. python docs_src/build_docs.py
 
 Needs: pip install flask pytest playwright   (Jinja2 comes with Flask)
@@ -107,7 +107,6 @@ DOCS = [
     ("03_Design/UI_Screens.pdf", "User Interface Screens", ["cover", "d_ui"]),
     ("05_Testing/Test_Cases.pdf", "Test Cases and Results", ["cover", "s11_testing"]),
     ("06_Project_Management/Project_Plan.pdf", "Project Plan", ["cover", "pm_plan"]),
-    ("06_Project_Management/Meeting_Log.pdf", "Meeting Log and Weekly Progress", ["cover", "pm_meetings"]),
     ("06_Project_Management/Contribution_Record.pdf", "Contribution Record", ["cover", "pm_contrib"]),
 ]
 
@@ -142,6 +141,9 @@ def main():
         for path, title, sections in DOCS:
             html = env.get_template("base.html").render(context, doc_title=title, sections=sections,
                                                         is_report=sections is REPORT)
+            # Never split a table across pages, and keep a heading together with the table right below it
+            html = re.sub(r"(<h([23])[^>]*>(?:(?!</h\2>).)*</h\2>\s*)(<table\b.*?</table>)",
+                          r'<div class="keep">\1\3</div>', html, flags=re.S)
             tmp = os.path.join(HERE, "_build.html")
             with open(tmp, "w") as f:
                 f.write(html)

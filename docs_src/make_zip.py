@@ -9,7 +9,7 @@ import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FOLDERS = ["01_Report", "02_Requirements", "03_Design", "04_Source_Code", "05_Testing",
-           "06_Project_Management", "07_Demo"]
+           "06_Project_Management"]
 SKIP = ("__pycache__", ".pytest_cache", "eums.db", "config.py", ".pyc")
 
 section = sys.argv[1] if len(sys.argv) > 1 else "X"

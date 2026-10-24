@@ -18,7 +18,7 @@
     ('Meter readings and billing', 'Implementation', 2, 0, 'done'), ('Payments and customer portal', 'Implementation', 1, 2, 'done'),
     ('Complaints and outages', 'Implementation', 1, 0, 'done'), ('Dashboards and reports', 'Implementation', 0, 1, 'wip'),
     ('Seed data and sample CSV', 'Implementation', 0, 3, 'done'), ('Unit and functional tests', 'Testing', 3, 2, 'done'),
-    ('Mid-sem report and diagrams', 'Documentation', 3, 0, 'done'), ('Demo video', 'Documentation', 1, 2, 'todo'),
+    ('Mid-sem report and diagrams', 'Documentation', 3, 0, 'done'),
     ('MySQL port', 'Implementation', 0, 2, 'todo'),
   ] %}
   <tr><td>{{ task }}</td><td>{{ phase }}</td><td>{{ M[a % n].name }}</td><td>{{ M[b % n].name }}</td>
@@ -27,12 +27,4 @@
   <caption>Task allocation</caption>
 </table>
 <h3>Git commit history</h3>
-<p>The repository history (<code>git log --oneline --all</code>) is the evidence of individual work. Each member
-commits their own module from their own GitHub account. The log is attached in <code>06_Project_Management/git_log.txt</code>.</p>
-<h3>Contribution declaration</h3>
-<p>We confirm that the contributions listed above are accurate and that every member can explain the parts of the system
-they worked on.</p>
-<table>
-  <tr><th>Name</th><th>Reg. no.</th><th style="width:30%">Signature</th><th style="width:18%">Date</th></tr>
-  {% for m in team.members %}<tr><td>{{ m.name }}</td><td>{{ m.reg_no }}</td><td style="height:26px"></td><td></td></tr>{% endfor %}
-</table>
+<p>The repository history is attached as <code>06_Project_Management/git_log.txt</code>.</p>

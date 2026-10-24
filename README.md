@@ -61,13 +61,12 @@ To run the tests: `python -m pytest -v` (inside `04_Source_Code`). You should se
                         UI_Screens.pdf, diagram_sources/ (editable .mmd and .svg files)
 04_Source_Code/         the app, its README, sample_data/, tests/
 05_Testing/             Test_Cases.pdf, Test_Evidence/ (pytest log + screenshots)
-06_Project_Management/  Project_Plan.pdf, Meeting_Log.pdf, Contribution_Record.pdf, git_log.txt
-07_Demo/                DEMO_VIDEO_LINK.txt
+06_Project_Management/  Project_Plan.pdf, Contribution_Record.pdf, git_log.txt
 ```
 
 ---
 
-## 3. Showing the end-to-end feature (for the demo video)
+## 3. Showing the end-to-end feature
 
 This is the part the evaluators most want to see working.
 
@@ -82,18 +81,11 @@ This is the part the evaluators most want to see working.
 7. Optional: log in as **admin**, go to **Outages → Report Outage** for Teliyarganj, then log back in as Sushrut to see
    the alert.
 
-A suggested 5–7 minute script is in `07_Demo/DEMO_VIDEO_LINK.txt`.
-
 ---
 
 ## 4. Things still to fill in before uploading
 
-- [ ] **Group number, section, instructor and institute** – edit `docs_src/team.json`, then rebuild the PDFs (section 5 below)
-- [ ] **Demo video** – record it, upload it to an allowed cloud drive as *view-only*, and paste the link in
-      `07_Demo/DEMO_VIDEO_LINK.txt` and `docs_src/team.json`. Open it in an incognito window to make sure it works
-      without asking for access.
-- [ ] **Meeting log** – add the real dates and who attended (`06_Project_Management/Meeting_Log.pdf`)
-- [ ] **Contribution declaration** – everyone signs or confirms (`06_Project_Management/Contribution_Record.pdf`)
+- [ ] **Group number and section** – edit `docs_src/team.json`, then rebuild the PDFs (section 5 below)
 - [ ] **AI-tool disclosure** – section 6 of the guidelines asks for this if any AI tool was used. Fill in the table
       in the report appendix.
 - [ ] Check there are no passwords or keys anywhere. The only passwords are the sample demo logins above.

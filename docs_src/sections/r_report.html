@@ -4,7 +4,7 @@
   4. Scope &middot; 5. Stakeholders &middot; 6. Requirements &middot; 7. Use cases and user stories &middot; 8. System design &middot;
   9. Technology stack &middot; 10. Implementation progress &middot; 11. Testing &middot; 12. Project management &middot;
   13. Individual contribution &middot; 14. Challenges &middot; 15. Remaining work &middot; 16. References &middot; Appendix</p>
-  <p class="small">Demo video: {{ team.demo_video_link }}. The SRS, use cases, full design document, UML diagrams, UI screens,
+  <p class="small">The SRS, use cases, full design document, UML diagrams, UI screens,
   test cases and project-management records are also in folders 02&ndash;06 of the ZIP as separate PDFs.</p>
 </div>
 
@@ -52,7 +52,7 @@ output as a team before moving on, and wrote tests while coding instead of leavi
 </table>
 
 <h2>Scope of the Project</h2>
-<div class="two">
+<div class="two keep">
 <div>
 <h3>Included</h3>
 <ul>
@@ -276,8 +276,7 @@ overestimates something this small. We treat it as an upper limit and cut Could-
   <tr><th style="width:24%">Name</th><th style="width:15%">Reg. no.</th><th>Main work</th></tr>
   {% for m in team.members %}<tr><td>{{ m.name }}</td><td>{{ m.reg_no }}</td><td>{{ m.role }}</td></tr>{% endfor %}
 </table>
-<p class="small">The task-allocation table, meeting log, weekly progress and signed declaration are in
-<code>06_Project_Management/</code>, along with the git log.</p>
+<p class="small">The full task-allocation table and the git log are in <code>06_Project_Management/</code>.</p>
 
 <h2>Challenges Faced and Solutions Attempted</h2>
 <ul>
