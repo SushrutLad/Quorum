@@ -66,7 +66,7 @@ This README walks through each item on the mid-sem evaluation list and where to 
                         UI_Screens.pdf, diagram_sources/ (editable .mmd and .svg files)
 04_Source_Code/         the app, its README, sample_data/, tests/
 05_Testing/             Test_Cases.pdf, Test_Evidence/ (pytest log + screenshots)
-06_Project_Management/  Project_Plan.pdf, Contribution_Record.pdf, git_log.txt
+06_Project_Management/  Project_Plan.pdf, Contribution_Record.pdf
 ```
 
 ---

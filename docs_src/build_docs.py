@@ -153,10 +153,8 @@ def main():
             os.makedirs(os.path.dirname(out), exist_ok=True)
             page.pdf(path=out, format="A4", print_background=True, display_header_footer=True,
                      header_template="<span></span>",
-                     footer_template=f'<div style="font-size:8px;width:100%;padding:0 14mm;color:#64748b;display:flex;'
-                                     f'justify-content:space-between"><span>{team["group_number"]} &middot; EUMS &middot; '
-                                     f'{title}</span><span><span class="pageNumber"></span> / '
-                                     f'<span class="totalPages"></span></span></div>',
+                     footer_template='<div style="font-size:8px;width:100%;padding:0 14mm;color:#64748b;text-align:right">'
+                                     '<span class="pageNumber"></span> / <span class="totalPages"></span></div>',
                      margin={"top": "14mm", "bottom": "16mm", "left": "15mm", "right": "15mm"})
             print("built", path)
         browser.close()
