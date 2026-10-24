@@ -3,7 +3,7 @@
   <p>1. Problem statement and motivation &middot; 2. Objectives &middot; 3. Process model and feasibility study &middot;
   4. Scope &middot; 5. Stakeholders &middot; 6. Requirements &middot; 7. Use cases and user stories &middot; 8. System design &middot;
   9. Technology stack &middot; 10. Implementation progress &middot; 11. Testing &middot; 12. Project management &middot;
-  13. Individual contribution &middot; 14. Remaining work &middot; 15. References &middot; Appendix</p>
+  13. Individual contribution &middot; 14. Challenges &middot; Appendix</p>
   <p class="small">The SRS, use cases, full design document, UML diagrams, UI screens,
   test cases and project-management records are also in folders 02&ndash;06 of the ZIP as separate PDFs.</p>
 </div>
@@ -278,26 +278,13 @@ overestimates something this small. We treat it as an upper limit and cut Could-
 </table>
 <p class="small">The full task-allocation table and the git log are in <code>06_Project_Management/</code>.</p>
 
-<h2>Work Planned for the Remaining Semester</h2>
-<table>
-  <tr><th style="width:12%">Week</th><th>Work</th></tr>
-  <tr><td>9</td><td>Meter replacement, CSRF protection</td></tr>
-  <tr><td>9&ndash;10</td><td>MySQL version with a stored procedure for billing (DBMS)</td></tr>
-  <tr><td>10&ndash;11</td><td>Late fees and reminders, report filters and CSV export, PDF invoice</td></tr>
-  <tr><td>12&ndash;13</td><td>System, security and performance testing; acceptance testing with classmates; bug fixes</td></tr>
-  <tr><td>14</td><td>User guide, final report and final demo</td></tr>
-</table>
-
-<h2>References</h2>
-<ol class="small">
-  <li>R. S. Pressman and B. R. Maxim, <i>Software Engineering: A Practitioner's Approach</i>, 9th ed., McGraw-Hill, 2019.</li>
-  <li>I. Sommerville, <i>Software Engineering</i>, 10th ed., Pearson, 2015.</li>
-  <li>IEEE Std 830-1998, Recommended Practice for Software Requirements Specifications.</li>
-  <li>B. W. Boehm, <i>Software Engineering Economics</i>, Prentice-Hall, 1981.</li>
-  <li>A. Silberschatz, H. F. Korth, S. Sudarshan, <i>Database System Concepts</i>, 7th ed., McGraw-Hill, 2019.</li>
-  <li>Flask, SQLite, Chart.js and pytest documentation (flask.palletsprojects.com, sqlite.org, chartjs.org, docs.pytest.org).</li>
-  <li>UPERC domestic and commercial electricity tariff schedules (used as a model for our slabs; our rates are illustrative).</li>
-</ol>
+<h2>Challenges Faced and Solutions Attempted</h2>
+<ul>
+  <li><b>Slab billing was easy to get wrong</b> at the slab edges and with decimals. We wrote it as one small function and tested edge cases.</li>
+  <li><b>Readings going backwards</b> if someone skips the form. We added triggers so the database itself refuses them.</li>
+  <li><b>Charts mixing kWh, kL and gas units.</b> Comparison charts use rupees; usage charts are drawn per utility.</li>
+  <li><b>Tests affecting each other.</b> Each test now gets its own fresh database file.</li>
+</ul>
 
 <h2 class="plain">Appendix: AI-Tool Disclosure and How to Run</h2>
 <table>
