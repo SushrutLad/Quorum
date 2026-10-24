@@ -25,4 +25,4 @@ tests/test_billing.py::test_ut04_open_ended_top_slab PASSED              [ 90%]
 tests/test_billing.py::test_ut05_negative_units_rejected PASSED          [ 95%]
 tests/test_billing.py::test_ut06_water_without_tax_and_decimal_units PASSED [100%]
 
-============================= 20 passed in 12.08s ==============================
+============================= 20 passed in 11.98s ==============================
